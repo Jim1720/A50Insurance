@@ -1,0 +1,33 @@
+
+.welcomeTitle { margin: auto; color: dodgerblue; font-family: 'Times New Roman', Times, serif;}
+.welcomeText  { color: dodgerblue; }
+.welcomeText2 { color: white; }
+.welcomePlan { color: gold}
+
+body { background-color: black }
+
+h2 { color: white }
+h3 { color: white }
+
+.nav { color: white; }
+
+.normalText { color: white; font-family: Arial, Helvetica, sans-serif; font-size: medium }
+ 
+h5 { color: gold }
+
+.outline { border-color: gold; border-width: 2px }
+
+.claimDetail { color: white; }
+.claimHeader  { color: white; }
+.claimCustHeaderBlue { color: aqua; float: left;}
+.claimCustHeaderWhite { color: white; float: left;}
+.claimSubHeader { font-size: medium; color: lawngreen;}
+
+.first { color: white; }
+
+.error { color: lawngreen; }
+
+.whiteParaText { color: white; }
+ 
+
+ 
