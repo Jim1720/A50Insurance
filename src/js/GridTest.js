@@ -28,7 +28,7 @@ class GridTest extends React.Component {
         heads.push(head1);
         heads.push(head2);
 
-        console.log('head 1 >> ' + head1.class + ' ' + head1.description); 
+      //  console.log('head 1 >> ' + head1.class + ' ' + head1.description); 
 
         let data1 = {
 

@@ -53,10 +53,10 @@ class Plan extends React.Component {
         const success = 200;
         var resp = await database.getPlans(baseUrl);
         if(resp.status === success) {
-            console.log('plans read');
+         //   console.log('plans read');
             debugger;
             var plans = resp.data;
-            console.log(plans);   
+         //   console.log(plans);   
             debugger;
             this.buildSelections(plans);
         
@@ -74,8 +74,8 @@ class Plan extends React.Component {
         debugger;
         // second render calls this when state updated in comp did mount
         // after first render.
-        console.log('--build selection list');
-        console.log('input plans length ' + plans.length);
+      //  console.log('--build selection list');
+    //    console.log('input plans length ' + plans.length);
         debugger;
         var planStyle = {marginTop: '25px' }; 
         var selections = [];
@@ -100,12 +100,12 @@ class Plan extends React.Component {
             var plan = row['PlanName'].toString();
             var lit = row['PlanLiteral']; 
             //* var space = "&nbsp;";
-            var count = maxLength - plan.length; 
-            console.log(maxLength + ' ' + count);
+           // var count = maxLength - plan.length; 
+         //   console.log(maxLength + ' ' + count);
             //*var spacing = "";
             // set var with JSX special characters....
 
-            console.log('build line: ' + plan + ' ' + lit); 
+           // console.log('build line: ' + plan + ' ' + lit); 
  
            var planLine  =  
                  <Row  key={i}
@@ -125,7 +125,7 @@ class Plan extends React.Component {
         }  
          
          
-        console.log('-build selections list length ' + selections.length);
+     //   console.log('-build selections list length ' + selections.length);
         
         
        // 2nd render will be triggered to load screen with state.selections.
@@ -135,7 +135,7 @@ class Plan extends React.Component {
 
      });
 
-     console.log('-state.selections ' + this.state.selections);
+  //   console.log('-state.selections ' + this.state.selections);
    
 
     }
@@ -206,7 +206,7 @@ class Plan extends React.Component {
     render() {  
 
         var currentPlan = this.props.currentPlan;  
-        console.log('--render');
+      //  console.log('--render');
 
         return (<Container>
 
@@ -214,7 +214,7 @@ class Plan extends React.Component {
 
             <br></br>
             <Row> 
-            <h1 className="welcomePlan">Select a Plan</h1> <br/> 
+            <h1 className="welcomeTitle">Select a Plan</h1> <br/> 
             </Row>
             <Row>
                 <h4 className="normalText outline">Current Plan: {currentPlan}</h4>
@@ -226,7 +226,7 @@ class Plan extends React.Component {
             <br></br>
           
             <br></br> 
-            <Button variant="outline-primary" onClick={this.returnMenu}>Return to Menu</Button>
+            <Button variant="success" onClick={this.returnMenu}>Return to Menu</Button>
 
             </Container>
         ); 

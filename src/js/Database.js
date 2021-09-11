@@ -64,7 +64,7 @@ import axios from 'axios';
         debugger; 
         var instance = axios.create({
             baseURL: baseURL,
-            timeout: 2000
+            timeout: 4000
         }); 
         var url = "/register";
         debugger;
@@ -90,7 +90,7 @@ import axios from 'axios';
         debugger; 
         var instance = axios.create({
             baseURL: baseUrl,
-            timeout: 2000
+            timeout: 4000
         }); 
         var url = "/update";
         debugger;
@@ -115,7 +115,7 @@ import axios from 'axios';
         debugger; 
         var instance = axios.create({
             baseURL: baseUrl,
-            timeout: 2000
+            timeout: 4000
         }); 
         var url = "/updatePlan";
         debugger;
@@ -140,7 +140,7 @@ import axios from 'axios';
         debugger; 
         var instance = axios.create({
             baseURL: baseUrl,
-            timeout: 2000
+            timeout: 4000
         }); 
         var url = "/resetCustomerId";
         debugger;
@@ -164,7 +164,7 @@ import axios from 'axios';
         debugger; 
         var instance = axios.create({
             baseURL: baseUrl,
-            timeout: 2000
+            timeout: 4000
         }); 
         var url = "/resetPassword";
         debugger;
@@ -190,7 +190,7 @@ import axios from 'axios';
             debugger;  
             var instance = axios.create({
                 baseURL: baseUrl,
-                timeout: 2000
+                timeout: 4000
             });
             // use question mark. not ampersand.
             var url="cust?id=" + enteredId;
@@ -226,7 +226,7 @@ import axios from 'axios';
             debugger;  
             var instance = axios.create({
                 baseURL: baseUrl,
-                timeout: 2000
+                timeout: 4000
             });
             // use question mark. not ampersand.
             var url = "signin?id=" + enteredId + "&pw=" + enteredPassword; 
@@ -260,7 +260,7 @@ import axios from 'axios';
             debugger; 
             var instance = axios.create({
                 baseURL: baseUrl,
-                timeout: 2000
+                timeout: 4000
             }); 
             var url = "/addClaim";
             debugger;
@@ -287,7 +287,7 @@ import axios from 'axios';
             debugger;  
             var instance = axios.create({
                 baseURL: baseURL,
-                timeout: 2000
+                timeout: 4000
             });
             // use question mark. not ampersand.
             var url="/history?id=" + custId;
@@ -329,7 +329,7 @@ import axios from 'axios';
             debugger;  
             var instance = axios.create({
                 baseURL: baseURL,
-                timeout: 2000
+                timeout: 4000
             });
             // use question mark. not ampersand.
             var url="/custList";
@@ -357,7 +357,7 @@ import axios from 'axios';
                 debugger; 
                 let customers = [];
                 customers = response.data; // return claim array.
-                console.log('read history - found customers : good result'); 
+               // console.log('read history - found customers : good result'); 
                 return customers;
             } 
             console.log('unknown/unexpected status from customer list: ' + response.status);
@@ -372,7 +372,7 @@ import axios from 'axios';
             debugger; 
             var instance = axios.create({
                 baseURL: baseUrl,
-                timeout: 2000
+                timeout: 4000
             }); 
             var url = "/setClaimStatus";
             debugger;
@@ -397,7 +397,7 @@ import axios from 'axios';
             debugger; 
             var instance = axios.create({
                 baseURL: baseURL,
-                timeout: 2000
+                timeout: 4000
             }); 
             var url = "/stampAdjustedClaim";
             debugger;
@@ -423,7 +423,7 @@ import axios from 'axios';
             debugger;  
             var instance = axios.create({
                 baseURL: this.props.url,
-                timeout: 2000
+                timeout: 4000
             }); 
             var url="/readClaim?id=" + claimId;
             debugger;
@@ -456,7 +456,7 @@ import axios from 'axios';
             debugger;  
             var instance = axios.create({
                 baseURL: baseUrl,
-                timeout: 2000
+                timeout: 4000
             }); 
 
             try {
@@ -484,7 +484,7 @@ import axios from 'axios';
         debugger;  
         var instance = axios.create({
             baseURL: baseUrl,
-            timeout: 2000
+            timeout: 4000
         }); 
 
         try { 
@@ -507,7 +507,7 @@ import axios from 'axios';
   
         var instance = axios.create({
             baseURL: baseUrl,
-            timeout: 2000
+            timeout: 4000
         }); 
 
         try {

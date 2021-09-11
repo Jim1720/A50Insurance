@@ -19,24 +19,47 @@ class Status extends React.Component {
         var signedIn = this.props.signedIn;
         var name = first + " " + last + " is signed in";
         var whatToShow = (signedIn) ? name : "signed out"; 
-        var statusOut = { color: 'gray' }
-        var statusIn  = { color: 'goldenrod' } 
-        var statusReg = { color: 'orange'}
-        var useStyle = (signedIn) ? statusIn : statusOut;   
+        var statusOut = { color: 'gray', fontSize: "larger" }
+        // switch to burleywood color.
+        //var statusIn  = { color: 'gold' } 
+        //var statusReg = { color: 'orange'}
+        //var useStyle = (signedIn) ? statusIn : statusOut;   
         var statushelp = this.props.statushelp;
 
-        if(statushelp === 'register') { 
-            useStyle = statusReg;
+        if(statushelp === 'register') {  
             whatToShow = 'signin in progress...registration activity';
         }
         if(signedIn && statushelp === 'update') {
             whatToShow = sCustId + whatToShow;
         }
 
+        /* burleywood not available for style varables - workaround here */ 
+
+        var showTimeStatus =  <div >{whatToShow}</div>;
+
+        var isSignedIn = signedIn;
+        var isSignedOut = !signedIn;
+        var isRegistering = statushelp === 'register';
+
+        if(isRegistering) 
+        {  
+             showTimeStatus =  <div className="bwlg">{whatToShow}</div>;
+        }
+
+        if(isSignedIn)
+        {
+             showTimeStatus =  <div className="bwlg">{whatToShow}</div>;
+        }
+
+        if(isSignedOut)
+        {
+             showTimeStatus =  <div style={statusOut} >{whatToShow}</div>;
+        }
+
         return (
 
             <Form inline>
-            <div style={useStyle} className="status">{whatToShow}</div>
+            <div >{showTimeStatus}</div>
             </Form>
 
         );

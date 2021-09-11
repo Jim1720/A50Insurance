@@ -43,18 +43,25 @@ class Regconfirm extends React.Component {
 
         var white = { color: 'white' }
 
-        return( <div>
+        var center = { marginLeft: '352px'}
 
-            <h2 style={white}>Congratulations: you are registered!</h2>
+        var a = { marginLeft: '25px'}
 
-            <h2 style={white}>next:</h2>
+        var top = { marginTop: '100px'}
 
-            <p style={white}>select a desired plan for coverage</p>
+        return( <div><div style={center}>
 
-            <Button variant="outline-warning" onClick={this.getPlan}>Select Plan</Button>
-            <Button variant="outline-warning" onClick={this.mainMenu}>Defer Selection</Button>
+            <h2 style={top} className='burleywood'>Congratulations: you are registered!</h2>
+ 
 
-        </div>)
+            <p style={white}>Please select a plan. A selection must be made before claims can be filed.</p>
+
+            <br/>
+
+            <Button variant="primary" style={a} onClick={this.getPlan}>Select Plan</Button>
+            <Button variant="primary" style={a} onClick={this.mainMenu}>Defer Selection</Button>
+
+            </div></div>)
    } 
 
 }

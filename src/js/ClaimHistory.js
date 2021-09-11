@@ -179,9 +179,9 @@ class ClaimHistory extends React.Component {
                 var showConfine = (con === unused ) ? "" : con;
                 var showRelease = (rel === unused ) ? "" : rel;
                 var confineLit = (con === unused ) ? "" : "Confined:";
-                var releaseLit = (rel === unused ) ? "" : "Released:";
+                var releaseLit = (rel === unused ) ? "" : "Rel:";
                 var showLine = (showConfine !== "" || showRelease !== "");  
-                var medLine = <tr key={k8}><td>{confineLit} {showConfine} </td><td> {releaseLit} {showRelease} </td></tr>
+                var medLine = <tr key={k8}><td>{confineLit} {showConfine} </td><td>{releaseLit} {showRelease} </td></tr>
 
                 if(showLine) { 
                    out.push(medLine); 

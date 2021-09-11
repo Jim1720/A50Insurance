@@ -1,12 +1,13 @@
 
-.welcomeTitle { margin: auto; color: dodgerblue; font-family: 'Times New Roman', Times, serif;}
+.welcomeTitle { margin: auto; color: burlywood; font-family: Arial} 
+.wcenter {margin-left:370px; margin: auto; color: burlywood; font-family: Arial}
+
 .welcomeText  { color: dodgerblue; }
 .welcomeText2 { color: white; }
 .welcomePlan { color: gold}
 
 body { background-color: black }
-
-h2 { color: white }
+ 
 h3 { color: white }
 
 .nav { color: white; }
@@ -28,6 +29,35 @@ h5 { color: gold }
 .error { color: lawngreen; }
 
 .whiteParaText { color: white; }
+
+/* react does not recognize 'burleywood' as color in local variable !!. */
+
+.bw { color: burlywood }
+
+.bwlg { color: burlywood; font-size:larger }
+
+/* nav link classes */
+
+.linksel {
+
+    font-size: larger;
+    color: burlywood;
+}
+
+.link {
+
+    font-size: larger;
+    color: white;
+}
  
+ 
+ /* when using style vars did not work */
+ .bw { color: burlywood; }
+
+ .burleywood { color: burlywood; }
+
+
+ li { color: white; }
+             
 
  

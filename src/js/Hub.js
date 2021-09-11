@@ -94,8 +94,7 @@ class Hub extends React.Component {
 
     render() { 
  
-        var currentPlan = this.props.currentPlan;  
-        var goldenrod = { color: "goldenrod" } 
+        var currentPlan = this.props.currentPlan;   
 
         if(currentPlan === "none") {
 
@@ -140,6 +139,13 @@ class Hub extends React.Component {
 
          }
 
+         var b1 = {
+
+            marginRight: "10px",
+            fontSize: "larger"
+
+         }
+
         return (<Container>
 
             <br></br>
@@ -148,20 +154,20 @@ class Hub extends React.Component {
             </Row>
             <br></br>
             <Row className="justify-content-md-center">
-            <Image src={welcomePic} alt="pic" width='600' height='340' />
+            <Image src={welcomePic} alt="pic" width='800' height='400' />
             </Row> 
             <br></br>
             <Row className="justify-content-md-center">
                 
-            <Button variant="outline-primary" onClick={this.updateInfo}>Update Your Information</Button> 
-            <Button variant="outline-primary" onClick={this.fileCLaim}>File Claim</Button>
-            <Button variant="outline-primary" onClick={this.seeHistory}>Claim History</Button>
-            <Button variant="outline-primary" onClick={this.selectPlan}>Select Plan</Button> 
-            <Button variant="outline-primary" onClick={this.signOut}>Sign Out</Button>
+            <Button  style={b1} variant="primary" onClick={this.updateInfo}>Update Your Information</Button> 
+            <Button  style={b1} variant="primary" onClick={this.fileCLaim}>File Claim</Button>
+            <Button  style={b1} variant="primary" onClick={this.seeHistory}>Claim History</Button>
+            <Button  style={b1} variant="primary" onClick={this.selectPlan}>Select Plan</Button> 
+            <Button  style={b1} variant="primary" onClick={this.signOut}>Sign Out</Button>
             </Row>
             <br></br>
             <Row className="justify-content-md-center">
-                <div style={goldenrod}>{this.mainMessage}</div>
+                <div className="bwlg">{this.mainMessage}</div>
             </Row>
             
             </Container>);

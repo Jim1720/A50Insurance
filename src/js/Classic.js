@@ -31,14 +31,13 @@ class Classic extends React.Component {
 
       var h1style =  { 
                 
-        color: "dodgerblue",
+        color: "burleywood",
         fontFamily: "Arial"
    }
 
    var b1st = {
 
-    color: "white", 
-    backgroundColor: "black",
+    color: "white",  
     margin: "2px",
     fontSize:  "larger",
     fontFamily: "Arial" 
@@ -58,19 +57,19 @@ class Classic extends React.Component {
 
             <Row className="justify-content-md-center">
             <Carousel>
-              <Carousel.Item>
+              <Carousel.Item interval="9000">
                 <Image src={road} alt="pic" width='600' height='340' />
                 <Carousel.Caption> 
                   <p>Now is a good time to buy insurance !</p>
                 </Carousel.Caption>
               </Carousel.Item>
-              <Carousel.Item> 
+              <Carousel.Item interval="9000"> 
                 <Image src={sunset} alt="pic" width='600' height='340' />   
                 <Carousel.Caption> 
                   <p>Best Rates here!</p>
                 </Carousel.Caption>
               </Carousel.Item>
-            <Carousel.Item>
+            <Carousel.Item interval="9000">
                <Image src={lake} alt="pic" width='600' height='340' /> 
                <Carousel.Caption> 
                    <p>Wholesale Coverage!</p>

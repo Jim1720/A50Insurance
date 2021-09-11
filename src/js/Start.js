@@ -83,26 +83,20 @@ class Start extends React.Component {
 
         var h1style =  { 
                 
-             color: "dodgerblue",
+             color: "burleywood",
              fontFamily: "Arial"
         }
       
  
         var b1st = {
 
-            color: "white", 
-            backgroundColor: "black",
+            color: "white",  
             margin: "2px",
             fontSize:  "larger",
             fontFamily: "Arial" 
 
         }
-
-        var white = {
-
-            color: "white"
-
-        }
+ 
         var gray = {
 
             color: "gray"
@@ -134,13 +128,13 @@ class Start extends React.Component {
             <footer width='95%'> 
                 
                     <br/><br/><br/><br/>
-                    <span className='t1' style={white}>2019 - A50Insurance - React &nbsp; </span>
+                    <span className='bw'>2019 - A50Insurance - React &nbsp; </span>
                     <span  className='t1' style={gray}>Find out info here &nbsp;</span> 
-                    <a href="/info" onClick={this.info}  style={white}>Info</a>
+                    <a href="/info" onClick={this.info}  className="bw">Info</a>
                     <span  className='t1' style={gray}>&nbsp; Find about here...&nbsp;</span>
-                    <a href="/about" onClick={this.about}  style={white}>About</a>
+                    <a href="/about" onClick={this.about}  className="bw">About</a>
                     <span className='t1' style={gray}>&nbsp; Time to buy...</span>
-                    <a  href="/register" onClick={this.handleRegister}  style={white}>{this.friendlyDate}</a>
+                    <a  href="/register" onClick={this.handleRegister} className="bw">{this.friendlyDate}</a>
                     <span className='t1' style={gray}> This is a demonstration website</span>
     
                </footer>

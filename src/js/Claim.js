@@ -29,6 +29,7 @@ class Claim extends React.Component {
     isCustomerSignedIn = this.props.isCustomerSignedIn;
     setMessage = this.props.setMessage; 
     getToken = this.props.getToken;
+    handleClearAdjustmentFlag = this.props.handleClearAdjustmentFlag;
 
     // services
     typeServices = []; // services for claim type
@@ -42,7 +43,60 @@ class Claim extends React.Component {
     custId = this.props.custId;
     // custPlan - add to claim / calc covered amount also.
     custPlan = this.props.custPlan;
-  
+
+    externalClass = ""; // formats screen to picture, solid, frame or no effects.
+    userColor = ""; // background or frame color
+    labelColor = ""; // suitable label color
+    headerColor = ""; // suitable header colr
+    messageColor = ""; // suitable message color 
+    labelTypeColor = ""; // for service drop down and type field labels 
+    internalClass = ""; // for type change: set type and drop down labels.
+    /* when loading call to get style and color value for this screen */ 
+    handleLoadScreenStyle = this.props.handleLoadScreenStyle;
+    fetchScreenStyleInformation = this.props.fetchScreenStyleInformation;
+    refreshProp = this.refreshProp;
+
+    emptyClaim = {
+
+        ClaimIdNumber: '',
+        CustomerId: '',
+        ClaimType: this.defaultClaimType,
+        PlanId: '', // missing on screen
+        ClaimDescription: '', // missing on screen
+        PatientFirst: '',
+        PatientLast: '',
+        Physician: '',
+        Clinic: '', 
+        Procedure1: '',
+        Procedure2: '',
+        Diagnosis1: '',
+        Diagnosis2: '',  
+        DateService: '',   
+        TotalCharge: '0.0', // missing on screen
+        BalanceOwed: '0.0',
+        Service: '',  // from dropdown.
+        Insured: '', // uos
+        Primary: '',// uos
+        Secondary: '', // uos - unused but on screen 
+        DateAdded: '',
+        AdjustedDate: this.defaultDate,
+        ClaimStatus: 'Entered',
+        Referral: '',
+        PaymentAction: '',
+        PaymentPlan: '',
+        PaymentAmount: '0.0',
+        PaymentDate: this.defaultDate,
+        DateConfine: '',  // show blank on screen put default date in before update database.
+        DateRelease: '',
+        ToothNumber: '',
+        DrugName: '',
+        Eyeware: '',
+        AdjustedClaimId: '',
+        AdjustingClaimId: '',
+        AppAdjusting: "" // only shows on claim being adjusted not on new or adjustment claim.
+
+    }
+
     state = {
 
         messages: { messages: [] }, 
@@ -95,7 +149,7 @@ class Claim extends React.Component {
     DateConfine = '';
     DateRelease = '';
     typeFields = <h3>Select claim type.</h3>
-    messages = [];
+    messages = []; 
     msgOut = []; 
     msgConcatOut = '';  
     claimToAdjust = '';
@@ -111,14 +165,14 @@ class Claim extends React.Component {
  
              const { history: { push } } = this.props; 
              push('/start');  
-         } 
-    
+         }  
+      
+     
       var closureThis = this;
-      this.loadAllServices(this.baseUrl, closureThis);
- 
+      this.loadAllServices(this.baseUrl, closureThis); 
       
     }
-
+ 
      loadAllServices = async (baseUrl, closureThis) => {
  
         var database = new Database();
@@ -130,14 +184,20 @@ class Claim extends React.Component {
             debugger;
             closureThis.allServices = resp.data; 
             debugger;
-            // set service drop down data to medical default claim values.
-            this.setDefaultType(closureThis); // dropdown for medical claim.
-            debugger;
             // load adjustement fields if required
-            this.claimToAdjust = this.props.claimToAdjust;
+            closureThis.claimToAdjust = closureThis.props.claimToAdjust;
             debugger;
-            this.creatingAdjustmentClaim = (this.claimToAdjust !== null &&
-                              this.claimToAdjust !== undefined); 
+            closureThis.creatingAdjustmentClaim = (closureThis.claimToAdjust !== null &&
+                              closureThis.claimToAdjust !== undefined);  
+            debugger;
+            var defaultMedicalType = 'm';
+            // set service drop down data to medical default claim values. 
+            var defaultType = (closureThis.creatingAdjustmentClaim === true) ? 
+                                closureThis.claimToAdjust.ClaimType :
+                                defaultMedicalType
+            //
+            this.setDefaultType(defaultType, closureThis); // dropdown for medical claim. 
+            //
             if(this.creatingAdjustmentClaim === true) { 
                 this.setupAdjustment(closureThis);
 
@@ -148,6 +208,12 @@ class Claim extends React.Component {
             console.log('Plan.js get plans failed' + resp.status); 
         } 
 
+    }
+
+
+    handleClearAdjData = () => { 
+
+        this.handleClearAdjustmentFlag();
     }
 
     setupAdjustment = (closureThis) => {
@@ -237,7 +303,7 @@ class Claim extends React.Component {
         const t = event.target;
         const name = t.name;
         let value = t.value; 
-        console.log('on change ' + name + ' = ' + value);
+    //    console.log('on change ' + name + ' = ' + value);
 
         var u = new Utility();
         var newStateClaim = u.replaceProperty(this.state.claim, name, value);
@@ -287,6 +353,13 @@ class Claim extends React.Component {
 
         if(!pat2s.test(this.state.claim.ClaimDescription.trim())) { 
             msg.push('invalid state ' + this.state.claim.ClaimDescription.trim()); 
+        }
+
+        debugger;
+        var notSelected = "";
+        // customer field 'custPlan' input property.
+        if(this.custPlan === notSelected) { 
+            msg.push('Plan must be assigned to customer before a claim can be entered.'); 
         }
 
         debugger;
@@ -449,11 +522,11 @@ class Claim extends React.Component {
         // screen keep that in case edits fail and screen must be 
         // updated again 
         // copy state claim to distinct object addClaim to add.
-        debugger;
+     
         var u = new Utility();
         var addClaim = u.makeDistinctNewObject(this.state.claim);
         // put formatted dates in for the database. 
-        debugger;
+       
         addClaim.DateService = this.DateService;
         addClaim.DateConfine = this.DateConfine;
         addClaim.DateRelease = this.DateRelease; 
@@ -470,6 +543,7 @@ class Claim extends React.Component {
         // copy current customer plan to claim.
         addClaim.PlanId = this.custPlan;
 
+        debugger;
         // calculate covered charges and balance.
         addClaim.TotalCharge = await  this.calculateTotalCharge(addClaim.PlanId, addClaim.Service);
          
@@ -584,6 +658,10 @@ class Claim extends React.Component {
        debugger;
        if(stampResult === "OK") { 
 
+             // clear adjustment flag in app.js so subsequent 
+             // screens to not retain data. 
+             this.handleClearAdjData();
+
              // show message on update screen
              var a = claim.toString();
              var b =  adjustment.toString();
@@ -635,11 +713,23 @@ class Claim extends React.Component {
        return info; 
     }
 
-    setDefaultType = async (closureThis) => {
+    setDefaultType = async (type, closureThis) => {
  
         debugger; 
+        var lit = "";
+        switch(type)
+        {
+            case 'm': lit = "Medical"; break;
+            case 'd': lit = "Dental"; break;
+            case 'v': lit = "Vision"; break;
+            case 'x': lit = "Drug"; break;
+            default: break;
+         } 
+
         // service-type, claim-type, closure.
-        await this.changeServiceList("Medical", "m", closureThis);
+        //await this.changeServiceList("Medical", "m", closureThis);
+
+        await this.changeServiceList(lit, type , closureThis);
 
     }
 
@@ -680,6 +770,21 @@ class Claim extends React.Component {
                 serviceType = "Medical";
         } 
         
+        // determine color on type field labels and service drop down label.
+        // use button color ; except when solid use the current label color
+        // for readability.
+
+        // variable: labelTypeColor is used for dropdown and claim type fields.
+        if(this.internalClass === "Solid")
+        {
+            // readability.
+            this.labelTypeColor = this.labelColor;
+        }
+        else
+        {
+            // match selected claim type button.
+            this.labelTypeColor = this.colorForClaimType();
+        }
       
  
          var closureThis = this;
@@ -710,7 +815,7 @@ class Claim extends React.Component {
                  outIndex++;
             }
         }
-        console.log('claim typeServices are: ' + closureThis.typeServices);
+      //  console.log('claim typeServices are: ' + closureThis.typeServices);
         this.emptyTypeFields(shortType, closureThis, firstService);
       
 
@@ -718,7 +823,7 @@ class Claim extends React.Component {
 
     emptyTypeFields = (shortType, closureThis, firstService) => {
 
-        console.log('-- empty type fields.');
+      //  console.log('-- empty type fields.');
 
         var nClaim = this.state.claim;
         nClaim.ClaimType = shortType;
@@ -736,7 +841,7 @@ class Claim extends React.Component {
          // change type ----> reload service drop down box!!
          // this triggers it!
       
-         console.log('-- resetting state --- ');
+       //  console.log('-- resetting state --- ');
          closureThis.setState({ 
 
             claim: nClaim 
@@ -781,7 +886,7 @@ class Claim extends React.Component {
 
     showMessages = () => {
 
-        this.msgOut = [];
+        this.msgOut = []; 
          
 
         if(this.messages.length === 0) {
@@ -789,10 +894,14 @@ class Claim extends React.Component {
         }
 
         this.msgOut = [];   
+        var key = 0;
         for(let theMessage of this.messages) {
-
-            let v = <li> {theMessage} </li>;
+           
+            key = key + 1;
+            var k = key.toString();
+            let v = <li key={k}> {theMessage} </li>;
             this.msgOut.push(v);
+            // 
         }  
  
 
@@ -818,7 +927,7 @@ class Claim extends React.Component {
         }
 
         debugger;
-        console.log('-- load service drop down');
+    //    console.log('-- load service drop down');
         var serviceOptions = []; 
         for(var i = 0; i < this.typeServices.length; i++) {
 
@@ -826,48 +935,150 @@ class Claim extends React.Component {
 
             var row = this.typeServices[i];
             var service = row["ServiceName"].toString();
-            var opt = <option key={i}>{service}</option>
+            var opt = <option key={i.toString()}>{service}</option>
             serviceOptions.push(opt); 
 
         
         }   
-        console.log(serviceOptions.length + ' service entries laoded');
+     //   console.log(serviceOptions.length + ' service entries laoded');
         return serviceOptions;
         
+    }
+
+    colorForClaimType = () => {
+
+        var value = this.state.ClaimType;
+        var color = "white";
+        switch(value) {
+
+            case "m" : color = "red"; break;
+            case "d" : color = "dodgerblue"; break;
+            case 'v' : color = "goldenrod"; break;
+            case 'x' : color = "lawngreen"; break;
+            default: break;
+        }
+
+        return color;
+
     }
 
     render() { 
 
        
+        /* was loaded in the navArea component when
+           navigation changed - here we fetch th
+           style values. 
+           note: can not update state here with new sytle info
+           or the react system will loop. No style state updates here
+        */
+
+           debugger;  
+           var screenStyle = this.fetchScreenStyleInformation("claim");
+           this.messageColor = 'burleywood'; // default was lawngreen.
+           this.labelColor = 'dodgerblue';
+           this.headerColor = 'burleywood';
+   
+           // - - - - get class and color information - - - 
+           var styleObjectFound = screenStyle === null ? false : true;
+           this.messageColor = 'white'; // default was lawngreen.
+            debugger; 
+            if(styleObjectFound) { 
+               
+               this.externalClass = screenStyle.externalClass;
+               this.userColor = screenStyle.userColor;
+               this.labelColor = screenStyle.labelColor;
+               this.headerColor = screenStyle.headerColor;
+               this.messageColor = screenStyle.messageColor;   
+
+               // label color for service drop down and type fields
+               this.internalClass = screenStyle.internalClass;
+               if(this.internalClass === "Solid")
+               {
+                    this.labelTypeColor = this.labelColor; // readability.
+               }
+               else
+               {
+                    this.labelTypeColor = this.colorForClaimType();
+               }
+   
+            }
 
         var blue = {
 
             color: this.claimFieldColor 
         }
 
+        /* define label colors on screen */
         var st1 = {
 
             fontFamily: "Arial",
-            fontSize: "larger"
+            fontSize: "larger",
+            color: this.labelColor 
         } 
+
+        /* type field labels and service label */
+
+        /* matches color of button med,den, etc; 
+        /* except on solid background will match */
+        /* label color for readabililty. */
+
+      
 
          var b1st = {
 
-            marginTop: "34px",
-            color: "white", 
-            backgroundColor: "black", 
+            marginTop: "34px",  
             fontSize:  "larger",
             fontFamily: "Arial" 
         
+        } 
+ 
+ 
+        var outlineStyle = { 
+
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: this.userColor, 
+            padding: "15px 30px 15px 30px"
+        }
+
+        var solidStyle = {
+
+            backgroundColor: this.userColor,
+            transitions: "4s",
+            padding: "15px 30px 15px 30px"
+        }
+
+        var errorMessagStyle = {
+
+            marginLeft: "50px",
+            marginTop: "34px" ,
+            color: this.messageColor
+        }
+ 
+        var userStyle = {}
+
+        switch(this.externalClass)
+        {
+
+            case 'bg-outline':  
+                  userStyle = outlineStyle;
+                  break;
+            case 'bg-solid':
+                  userStyle = solidStyle;
+                  // match label color when solid override button color for visablity.
+                  this.labelTypeColor = this.labelColor
+                  break; 
+            default:
+                  break;
         }
  
         var button1 = <div>   
         <Col>  
-        <Button style={b1st} variant="outline-primary" onClick={this.fileClaim}>Submit Claim</Button>
+        <Button style={b1st} variant="primary" onClick={this.fileClaim}>Submit Claim</Button>
         </Col> </div>;
 
         var button2 = <div><Col> 
-        <Button style={b1st} variant="outline-primary" onClick={this.cancelSubmit}>Cancel</Button> 
+        <Button style={b1st} variant="primary" onClick={this.cancelSubmit}>Cancel</Button> 
         </Col></div>;
           
         var medical = (this.state.claim.ClaimType === "m");
@@ -875,13 +1086,46 @@ class Claim extends React.Component {
         var vision  = (this.state.claim.ClaimType === "v");
         var drug    = (this.state.claim.ClaimType === "x");   
 
+         /* react does not allow burleywood in the style css variables
+           workaround here */
+
+           var headerStyle = {
+
+            color: this.headerColor
+        }
+
+
+           var linkIsStyle = "";
+           var linkIsOutline = "bg-outline";
+           var header = "";
+           var messenger = "";
+           if(this.externalClass === linkIsStyle)
+           {
+                header = <h2 className="welcomeTitle">New Claim</h2> 
+                messenger = <div className="welcomeTitle">{this.msgOut}</div>
+           }
+           else if(this.externalClass === linkIsOutline)
+           {
+              header =  <h2 className="bw">New Claim</h2> 
+              messenger =<div className="bw">{this.msgOut}</div>
+           }
+           else
+           {
+                header =  <h2 style={headerStyle}>New Claim</h2> 
+                messenger = <div style={errorMessagStyle}>{this.msgOut}</div> 
+           }
+
         return(<Container> 
              
-            <Row> 
-            <h1 className="welcomeTitle">Submit Claim</h1> <br/> 
+             <div id="styleDiv" className={this.externalClass} style={userStyle}>
+
+            <Row className="justify-content-md-center"> 
+            {header}
             </Row> 
 
-            <Form>  
+            <br>
+            </br>
+            <Form >  
 
             <Row> {/* entire screen */}
             <Col xs={2}> {/* buttons are first column */}
@@ -889,10 +1133,10 @@ class Claim extends React.Component {
                 <Form.Group>
         
                     <ListGroup>
-                    <Button style={b1st} id="medical" variant="outline-primary" onClick={this.changeType}>Medical</Button>
-                    <Button style={b1st} id="dental" variant="outline-primary" onClick={this.changeType}>Dental</Button>
-                    <Button style={b1st} id="vision" variant="outline-primary" onClick={this.changeType}>Vision</Button>
-                    <Button style={b1st} id="drug" variant="outline-primary" onClick={this.changeType}>Drug</Button>
+                    <Button key="1" style={b1st} id="medical" variant="primary" onClick={this.changeType}>Medical</Button>
+                    <Button key="2" style={b1st} id="dental" variant="primary" onClick={this.changeType}>Dental</Button>
+                    <Button key="3" style={b1st} id="vision" variant="primary" onClick={this.changeType}>Vision</Button>
+                    <Button key="4" style={b1st} id="drug" variant="primary" onClick={this.changeType}>Drug</Button>
                     </ListGroup>
 
                 </Form.Group> 
@@ -920,9 +1164,7 @@ class Claim extends React.Component {
             
             </Col>
             </Row>  
-            <Row>
-                    <h5>Physician and Clinic:</h5>
-            </Row>
+           
             <Row><Col>
 
                     <Form.Label style={st1} className='flabel'>Physican:</Form.Label>
@@ -945,11 +1187,8 @@ class Claim extends React.Component {
 
                     </Col>
  
-            </Row>
-            <br></br>
-            <Row>
-                     <h5>Claim Detail:</h5>
-            </Row>
+            </Row> 
+            
             <Row><Col>
 
                 <Form.Label style={st1} className='flabel'>Procedure Code:</Form.Label>
@@ -970,14 +1209,12 @@ class Claim extends React.Component {
                 <Form.Control type="text" name="ClaimDescription" value={this.state.claim.ClaimDescription}
                            style={blue}       onChange={this.handleChange}/>
                 </Col>
-            </Row>
- 
+            </Row>  
 
-<br></br>
-            <Row>
-                     <h5>Service:</h5>
-            </Row>
-            <Row><Col sm={4} >
+           
+            <Row> {/* contains service drop and type fields at right */}
+                
+                <Col sm={4} >
 
                {/* service dropdown goes here - was sub chg --></Col> */}
 
@@ -993,14 +1230,14 @@ class Claim extends React.Component {
 
              
             </Col>
-            </Row>
+
+
+            <Col>
 
             {/* claim type fields */}
             
-            {medical && (<div> <br></br>
-        <Row>  
-                <h5>Medical Detail:</h5>
-        </Row>
+            {medical && (<div> 
+        
          <Row>
               
          <Col>
@@ -1015,16 +1252,13 @@ class Claim extends React.Component {
          value={this.state.claim.DateRelease}
          style={blue}  onChange={this.handleChange}/>
         </Col> 
-            {button1}
-            {button2}
+           
 
         </Row>
      </div>)}
 
-     {dental && (<div> <br></br> 
-           <Row>  
-                  <h5>Dental Detail:</h5>
-         </Row>
+     {dental && (<div> 
+          
          <Row>
 
              <Col xs={3}>
@@ -1033,15 +1267,12 @@ class Claim extends React.Component {
              value={this.state.claim.ToothNumber}
              style={blue}   onChange={this.handleChange}/>
             </Col> 
-            {button1}
-            {button2}
+            
          </Row> 
       </div>)}
 
-      {vision && (<div> <br></br>
-           <Row>  
-                  <h5>Vision Detail:</h5>
-         </Row>
+      {vision && (<div> 
+           
          <Row>
          <Col xs={3}>
          <Form.Label style={st1} className='flabel'>Eyeware:</Form.Label>
@@ -1049,15 +1280,12 @@ class Claim extends React.Component {
           value={this.state.claim.Eyeware}
           style={blue}   onChange={this.handleChange}/>
          </Col>  
-            {button1}
-            {button2}
+           
          </Row>
      </div>)}
 
-     {drug && (<div> <br></br> 
-          <Row>  
-                  <h5>Drug Detail:</h5>
-         </Row>
+     {drug && (<div>  
+          
          <Row>
             <Col xs={3}>
             <Form.Label style={st1} className='flabel'>Drug Name:</Form.Label>
@@ -1065,21 +1293,34 @@ class Claim extends React.Component {
             value={this.state.claim.DrugName}
             style={blue}  onChange={this.handleChange}/>
             </Col>  
-            {button1}
-            {button2}
+           
          </Row>
 
        </div>)}  
        
+        </Col>
 
-            {/* end claim type fields */}
+       </Row>
+
+            {/* end claim type fields */} 
+
+            
             <Row> 
-                <div className="error">{this.state.messages.messages}</div> 
-            </Row>
-            </Col> 
-            </Row> 
-            </Form>  
 
+                {button1}
+                {button2}
+                {messenger}
+
+            </Row>
+          
+            </Col> {/* right col end */}
+
+            </Row> 
+
+            </Form>  
+        
+            </div> {/* style end */}
+            
         </Container>); 
     }
 

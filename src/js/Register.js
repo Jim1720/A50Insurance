@@ -30,6 +30,21 @@ class Register extends React.Component {
     setMessage = this.props.setMessage;
     setToken = this.props.setToken;
     handleSignIn = this.props.handleSignIn;
+
+    externalClass = ""; // formats screen to picture, solid, frame or no effects.
+    // styles coded but not used on this screen.
+    userColor = ""; // background or frame color
+    labelColor = "dodgerblue"; // suitable label color
+    headerColor = "burleywood"; // suitable header colr
+    messageColor = "burleywood"; // suitable message color 
+    /* when loading call to get style and color value for this screen */ 
+    handleLoadScreenStyle = this.props.handleLoadScreenStyle;
+    fetchScreenStyleInformation = this.props.fetchScreenStyleInformation;
+    refreshProp = this.refreshProp;
+
+    promotionCode = this.props.promotionCode;
+    emailValue = this.props.emailValue;
+
     
     constructor(props) {
 
@@ -67,13 +82,10 @@ class Register extends React.Component {
             claimCount: "0",
             extendColors: "0" 
         },
-        messages: { messages: [] } 
+        message: ""
     } 
-
-    messages = [];
-    msgOut = []; 
-    msgConcatOut = '';
-    useMessages = []; // test local var for holdibng msgs.
+  
+     messages = []; 
    
 
      handleSubmit = async (e) => {  
@@ -83,21 +95,26 @@ class Register extends React.Component {
    
         debugger; 
         e.preventDefault();      
-    
-        if(this.editFields() === false ) { 
-            return;
-        } 
  
+        var editResult = this.editFields();
+      //  console.log("edit result: " + editResult);
+        if(editResult === false ) { 
+            return;
+        }  
+
+      //  console.log("now check for duplicate");
 
         debugger;
         var isDuplicate =  await this.isitDuplicate(this.state.cust.custId,this.baseUrl);
 
         if(isDuplicate) {
  
-            this.setSpecialMessage("Duplicate use another customer id.");
-            this.showMessages();
+            var msg = "Duplicate use another customer id.";
+            this.setMessage(msg);
             return;
         }
+
+    //    console.log("now add customer");
 
         debugger; 
         await this.addCustomerToDatabase(this.state.cust, this.baseUrl); 
@@ -105,17 +122,30 @@ class Register extends React.Component {
        
     }
 
+    setMessage = (message) => { 
+
+     //   console.log("setMessage: " + message);
+
+        this.setState({
+
+            message: message
+
+        });
+
+    }
+
     setSpecialMessage = (value) => {
 
         this.messages.push(value);
     }
 
-    editFields  = async () => {
+    editFields  = function()  {
 
         debugger;
 
-        var msg = [];  
-        this.useMessages = [];
+        var msg = [];   
+
+    //    console.log("begin edit fields function");
 
         if(this.state.cust.custPass2.trim() === '') {
             msg.push("please enter confirming password.");  
@@ -128,14 +158,12 @@ class Register extends React.Component {
         var name1 = "^[a-zA-Z0-9]+$";   // cust id / password  1.more
         var name2 = "^[a-zA-Z0-9.#\\s\\_]+$"; //  names desc imbed blank required
         var addr2 = "^[a-zA-Z0-9.#\\_]* || \\s"; // addr 2 is not req allow space. * o,more
-        var phone = "^[0-9]{10}|([0-9]{3})[0-9]{3}-[0-9]{4}$";
-        var email =  "^[0-9a-zA-Z]+@[0-9a-zA-Z]+.{1}[0-9a-zA-Z]+$";
+        var phone = "^[0-9]{10}|([0-9]{3})[0-9]{3}-[0-9]{4}$"; 
  
         var pat1 = new RegExp(name1);
         var pat2 = new RegExp(name2); 
         var pat2s  = new RegExp(addr2);
-        var pPhone = new RegExp(phone);
-        var pEmail = new RegExp(email);
+        var pPhone = new RegExp(phone); 
 
         if(!pat1.test(this.state.cust.custId.trim())) { 
             msg.push('invalid customer id ' + this.state.cust.custId.trim()); 
@@ -153,9 +181,16 @@ class Register extends React.Component {
             msg.push('invalid  last name'); 
         }
 
-        if(!pEmail.test(this.state.cust.custEmail.trim())) { 
+
+        if(this.emailValue !== this.state.cust.custEmail.trim())
+        {
             msg.push('invalid  email'); 
         }
+
+        if(this.promotionCode !== this.state.cust.PromotionCode.trim())
+        {
+            msg.push('enter a valid promotion code'); 
+        } 
 
         if(!pPhone.test(this.state.cust.custPhone.trim())) { 
             msg.push('invalid  phone'); 
@@ -219,53 +254,31 @@ class Register extends React.Component {
 
  
         debugger;
-       
-        this.messages = [];
+        
         if(msg.length === 0) {
             return true;
         }
-        for(let item of msg) {
- 
-            this.messages.push(item);
-        }
- 
          
+         
+      //  console.log("edit - package messages");
 
-        this.showMessages();
+        this.messages = []; // clear  
+        var count = 0; 
+        for(let m of msg) {
+
+            let key = count;
+            let entry = <li key={key}> {m} </li>; 
+            this.messages.push(entry);
+            count++;
+ 
+        } 
+ 
+        this.setMessage(this.messages);
 
         return false;
 
-    }
-
-    showMessages = () => {
- 
-
-        if(this.messages.length === 0) {
-            return;
-        }
-
-        this.msgOut= []; // clear array
-        this.useMessages= []; // clear  
-        var count = 0;
-        for(let theMessage of this.messages) {
-
-            let s = count;
-            let v = <li key={s}> {theMessage} </li>;
-            this.msgOut.push(v);
-            this.useMessages.push(v);
-            count++;
-        } 
-         
-
-        debugger; 
-        this.setState({
-
-            messages: { messages: this.msgOut }
-
-        });
-         
-
-    }
+    } 
+  
 
     isitDuplicate = async  (custId,baseUrl) => {
 
@@ -281,6 +294,8 @@ class Register extends React.Component {
 
     addCustomerToDatabase = async (cust, baseUrl) => {   
 
+            debugger;
+            
             // format birthdate
             cust.custBirthDate = this.birthDate;  
 
@@ -291,7 +306,7 @@ class Register extends React.Component {
             if(info["Status"] === "Unsuccessful") {
 
                 var message = info["Message"];
-                this.setSpecialMessage(message); 
+                this.setMessage(message);
                 return;
             }  
 
@@ -300,8 +315,8 @@ class Register extends React.Component {
             this.setToken(token);  
 
             // set message
-            var msg = "Successfull Registration.";
-            this.setMessage(msg); 
+            var msg = "Successfull registration.";
+            this.setMessage(msg);
     
             // set signed in.
             this.handleSignIn(this.state.cust);   
@@ -347,6 +362,29 @@ class Register extends React.Component {
 
     render() {   
     
+          /* was loaded in the navArea component when
+           navigation changed - here we fetch th
+           style values. 
+           note: can not update state here with new sytle info
+           or the react system will loop. No style state updates here
+        */
+
+           debugger;  
+           var screenStyle = this.fetchScreenStyleInformation("register");
+   
+           // - - - - get class and color information - - - 
+           var styleObjectFound = screenStyle === null ? false : true;
+           this.messageColor = 'white'; // default was lawngreen.
+            debugger; 
+            if(styleObjectFound) {
+   
+               this.externalClass = screenStyle.externalClass;
+               this.userColor = screenStyle.userColor;
+               this.labelColor = screenStyle.labelColor;
+               this.headerColor = screenStyle.headerColor;
+               this.messageColor = screenStyle.messageColor;   
+   
+            }
          var st1 = {
 
             fontFamily: "Arial",
@@ -355,23 +393,61 @@ class Register extends React.Component {
 
          var b1st = {
 
-            color: "white", 
-            backgroundColor: "black",
-            margin: "2px",
+            color: "white",  
             fontSize:  "larger",
-            fontFamily: "Arial" 
+            fontFamily: "Arial",
+            marginLeft: "52px"
         
         }
+  
 
-         return (<div><Container> 
+        var userStyle = {};
 
-            <br></br>
-            <Row className="justify-content-md-center">
-            <h2>Customer Registration</h2>
+        var outlineStyle = { 
+
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: this.userColor,
+            padding: "10px"
+        }
+
+        var solidStyle = {
+
+            backgroundColor: this.userColor,
+            transitions: "4s",
+            padding: "10px"
+        }
+ 
+        switch(this.externalClass)
+        {
+
+            case 'bg-outline':  
+                  userStyle = outlineStyle;
+                  break;
+            case 'bg-solid':
+                  userStyle = solidStyle;
+                  break; 
+            default:
+                  break;
+        } 
+          
+
+         var register = "Register Customer";
+
+         var down = {
+
+            marginTop: "10px"
+
+         }
+     
+         return (<div><Container>  
+         
+            <Row> 
+            <h1 className="welcomeTitle">{register}</h1> <br/> 
             </Row>
             <br></br>
 
-            <Form onSubmit={this.handleSubmit}> 
+            <Form onSubmit={this.handleSubmit} className={this.externalClass} style={userStyle}> 
             
             <Row>
 
@@ -440,7 +516,10 @@ class Register extends React.Component {
                                         onChange={this.handleChange} name="custPhone"/>
                         </Col>
                     </Row> 
-                    
+                    <br></br>
+                    <Button style={b1st} variant="primary" onClick={this.handleSubmit}>Submit Registration</Button>  
+                    <Button style={b1st} variant="primary" onClick={this.handleCancel}>Cancel</Button>
+       
                 </Form.Group>
             </Col>
 
@@ -478,23 +557,17 @@ class Register extends React.Component {
                         <Form.Label style={st1} className='flabel'>Zip</Form.Label>
                         <Form.Control value={this.state.cust.custZip} type="text" name="custZip" onChange={this.handleChange}/> 
                        </Col>
-                    </Row> 
-                    
+                    </Row>  
+                    <Row>  
+                        <div className="welcomeTitle" style={down}>
+                               {this.state.message}
+                        </div> 
+                    </Row>
                 </Form.Group>
             </Col>  
-            </Row> 
-            
+            </Row>  
              
             
-            <br></br> 
-            <Row className="justify-content-md-center">
-            <Button style={b1st} variant="primary" onClick={this.handleSubmit}>Submit Registration</Button>  
-            <Button style={b1st} variant="primary" onClick={this.handleCancel}>Cancel</Button>
-            </Row> 
-            <br></br>
-            <Row> 
-                <div className='errorMessage'>{this.useMessages}</div>
-            </Row>
             </Form>
 
 

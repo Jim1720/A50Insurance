@@ -1,74 +1,82 @@
 
 // Info.js 
-import React from 'react';  
+import React from 'react';   
+import '../css/style.css';   
 
 class Info extends React.Component {
 
    
 
     render() {
-
-        var white = { color: "white"}
-        
-        var gold = { color: "gold"}
+ 
 
         return(
 
             <div class='container'>   
             <br/>
           
-            <div class="gold">
+            <div>
           
-                    <h3> Info </h3> 
+                    <h3  className="burleywood"> Information </h3> 
           
             </div> <br/>
           
-            <div class="gold"> 
+            <div> 
           
-              <p class='para'> Information:</p>
+            <p className="burleywood"> Use this app to register as a customer then enter and adjust claims.</p> 
+  
+          <ul>
+            <li> register - Enter customer info : you will be prompted to select a customer
+                identification number and password. A promotion code will be provided to
+                allow registeration. 
+            </li>
+            <li> update - Revise customer information. </li>
+            <li> plan - Assign a plan before claims can be filed. </li>
+            
+            <li> claim - Enter and submit a claim. You must select a claim type: medical, dental etc. </li>
+                    
+            
+            <li> history - Review claim history. An option is provided to adjust a claim with a new one,
+                or pay an existing claim. 
+            </li>
+            </ul>
           
             </div>
           
             
-            <div style={white} class="row"> 
-          
-                <p style={gold} class='para'> Use this app to register as a customer then enter and adjust claims.</p> 
-          
-                <ul>
-                  <li> register - Enter customer info : you will be prompted to select a customer
-                       identification number and password. 
-                  </li>
-                  <li> update - Revise customer info. </li>
+            <div> 
+
                   
-                  <li> claim - Enter and submit a claim. You must select a claim type: medical, dental etc. </li>
-               
-               
-               <li> history - Review claim history. An option is provided to adjust or pay a claim. </li>
-                </ul>
+            <p className="burleywood"> Style Feature</p> 
+  
+           
+            <ul>
+          
+          <li> Clicking on style will change update and claim screen styles.  
+               Available Styles: picture backgorund, solid or outline backgrounds with color link to
+               change colors.
+          </li>
+          </ul>
           
           </div>
                 
              
              
-              <div style={white} class='row'>
+              <div>
                   
-                <p style={gold} class="para"> An administration function is available for authorized individuals. </p>
-              </div>
-          
-              
-              <div style={white} class='row'>
-                   <ul> 
-                      <li> 
-                          Password Reset, Customer Id Reset and Customer List functions are available.
-                      </li>
-                    
-                      </ul>
-                </div>
+              <p className="burleywood"> An administration function is available for authorized individuals. </p>
+ 
+                     
+           <ul> 
+              <li> 
+                  Actions include: Password Reset, Customer Id Reset and Customer List functions are available.
+              </li>
             
-              </div>
+              </ul>
+            </div>
+             
 
-
-
+          </div>
         );
 
 

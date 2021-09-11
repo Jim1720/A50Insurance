@@ -3,4 +3,24 @@ h2 { color: white; }
  
 .flabel { font-style:large; color: dodgerblue; }
 
-.errorMessage { color: limegreen; }
+.errorMessage { color: white; font-Size: "larger" }
+
+/* since style is applied to the form we use padding if a div was between
+   we could use margin instead */
+	  
+.bg-image { margin-left: var(--margin-left);  
+    background-image : url('../images/road.jpg');  background-size: 100% 100%;
+    padding:  10px 40px 10px 40px}
+ 
+ /* these two classes use css variable */
+ 
+ .bg-outline { width: 1150px; margin-left: var(--margin-left); border-style: solid; border-width: 1px; 
+    border-color: var(--user-color); 
+    padding:  20px 40px 20px 40px }
+ 
+ .bg-solid { width: 1150px; margin-left: var(--margin-left); background-color : var(--user-color);
+             padding:  20px 40px 20px 40px }
+
+ /* when using style vars did not work */
+ .bw { color: burlywood; }
+             

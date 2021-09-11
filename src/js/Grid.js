@@ -19,7 +19,7 @@ class Grid extends React.Component {
         var header = this.props.header;
         var body   = this.props.body; 
 
-        console.log('.grid');   
+     //   console.log('.grid');   
  
 
         var out = [];

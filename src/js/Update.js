@@ -14,10 +14,11 @@ import { withRouter } from 'react-router-dom';
 import Database from './Database';
 import DateService from './DateService';
 
-import Utility from './Utility';
+import Utility from './Utility'; 
+ 
  
 
-import '../css/formStyle.css';
+import '../css/formStyle.css'; 
 
 // 3.11.20 - take on 5 functions / obsolete hub.
 
@@ -27,6 +28,7 @@ class Update extends React.Component {
     mainMessage = '';
     // edit errors below buttons
     messages = [];
+    messagesOneLine = ''; // put all messages on one line.
     msgOut = []; 
     msgConcatOut = '';
     birthDate = ''  // formatted
@@ -36,7 +38,16 @@ class Update extends React.Component {
     handleSignOut = this.props.handleSignOut;
     isCustomerSignedIn = this.props.isCustomerSignedIn;
     getMessage = this.props.getMessage;
-    getToken = this.props.getToken;
+    getToken = this.props.getToken; 
+    externalClass = ""; // formats screen to picture, solid, frame or no effects.
+    userColor = ""; // background or frame color
+    labelColor = ""; // suitable label color
+    headerColor = ""; // suitable header colr
+    messageColor = ""; // suitable message color 
+    /* when loading call to get style and color value for this screen */ 
+    handleLoadScreenStyle = this.props.handleLoadScreenStyle;
+    fetchScreenStyleInformation = this.props.fetchScreenStyleInformation;
+    refreshProp = this.refreshProp;
 
     constructor(props) {
 
@@ -62,9 +73,10 @@ class Update extends React.Component {
         // 
         var u = new Utility(); 
         u.trimFields(cust);
-        //u.showProperties(cust);  
+        //console.log("temp.debug.update showing cust fields looking for plan.")
+      //  u.showProperties(cust);  
         // react is wierd if you set up state in the constructor you
-        // muste do it this way.
+        // must do it this way.
         var fromDatabase = this.IsDateFromDatabase(cust.custBirthDate);
         if(fromDatabase.answer === true) {
             cust.custBirthDate = fromDatabase.reformattedDate;
@@ -73,7 +85,7 @@ class Update extends React.Component {
 
             cust: cust,
             messages: { messages: [] },
-            origionalPassword : cust.custPassword
+            origionalPassword : cust.custPassword 
 
         }
 
@@ -85,14 +97,12 @@ class Update extends React.Component {
 
            this.mainMessage = msg;
            // this.state.messages.messages = msg; 
-        }
-  
+        } 
        
     } 
 
     IsDateFromDatabase(date) {
-
-        debugger;
+ 
         var newDate = '';
         var fromDatabase = false;
         var slash = "/";
@@ -109,18 +119,13 @@ class Update extends React.Component {
   
     showMessage(message) {
 
-        this.setState({
-
-            messages: { messages: message }
-
-        });
+        this.messagesOneLine = message;
     }
 
     handleSubmit = (e) => { 
 
         e.preventDefault();    
-
-        debugger; 
+  
         if(this.editFields() === false ) {
             debugger; 
             return;
@@ -144,7 +149,11 @@ class Update extends React.Component {
 
     handleCustomerUpdate = async (cust, baseUrl) => {
 
-        debugger;
+        
+        //var u = new Utility(); 
+        //console.log("temp.debug.-handle update- showing cust fields looking for plan.")
+        //u.showProperties(cust);  
+ 
         var inputBirthDate = cust.custBirthDate;
         // for database use yyyy-mm-dd
         cust.custBirthDate = this.birthDate;
@@ -181,8 +190,7 @@ class Update extends React.Component {
         // restore date for app cust object held in memory and possible screen display if error. 
         cust.custBirthDate = inputBirthDate;  // back to mmddyyyy.
 
-       
-        debugger;
+        
         const success = "200";
         if(response["status"] === success) { 
              
@@ -256,8 +264,7 @@ class Update extends React.Component {
     }
 
     editFields = () => {
-
-        debugger;
+ 
 
         var msg = [];  
         this.messages = [];
@@ -399,10 +406,14 @@ class Update extends React.Component {
         }
 
         this.msgOut = [];   
+        this.messagesOneLine = '    ';
         for(let theMessage of this.messages) {
 
             let v = <li> {theMessage} </li>;
             this.msgOut.push(v);
+            // 
+            this.messagesOneLine += ' * ' +  theMessage;
+            this.messagesOneLine += ' ';
         }  
  
 
@@ -415,24 +426,52 @@ class Update extends React.Component {
          
 
     }
- 
-    render() {    
 
-        var gold = { color:"gold" }
+    
+ 
+    render() {      
+
+        /* was loaded in the navArea component when
+           navigation changed - here we fetch th
+           style values. 
+           note: can not update state here with new sytle info
+           or the react system will loop. No style state updates here
+        */
+
+        debugger;  
+        var screenStyle = this.fetchScreenStyleInformation("update");
+
+        // - - - - get class and color information - - - 
+        var styleObjectFound = screenStyle === null ? false : true;
+        this.messageColor = 'burleywood'; // default was lawngreen.
+        this.labelColor = 'dodgerblue';
+        this.headerColor = 'burleywood'; 
+         if(styleObjectFound) {
+
+            this.externalClass = screenStyle.externalClass;
+            this.userColor = screenStyle.userColor;
+            this.labelColor = screenStyle.labelColor;
+            this.headerColor = screenStyle.headerColor;
+            this.messageColor = screenStyle.messageColor;   
+
+         }
+
+       
+
+        var gold = { color: "gold" }
        
         /* labels */
         var st1 = { 
 
             fontFamily: "Arial",
-            fontSize: "larger"
+            fontSize: "larger",
+            color: this.labelColor
         } 
 
         /* buttons */
         var b1st = { 
-
-            color: "white", 
-            backgroundColor: "black",
-            margin: "2px",
+ 
+            marginLeft: "30px",
             fontSize:  "larger",
             fontFamily: "Arial" 
         
@@ -440,13 +479,85 @@ class Update extends React.Component {
 
         var white = {
             color: "white",
-            fontSize: "larger"       }
+            fontSize: "larger"    
+        }
 
-         return (<div><Container> 
+        var headerStyle = {
+
+            color: this.headerColor
+        }
+
+        var userStyle = {};
+
+        var outlineStyle = { 
+
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: this.userColor,
+            padding: "10px"
+        }
+
+        var solidStyle = {
+
+            backgroundColor: this.userColor,
+            transitions: "4s",
+            padding: "10px"
+        }
+
+        var errorMessagStyle = {
+
+            color: this.messageColor,
+            fontSize: "large",
+            marginLeft: "370px"
+        }
+
+
+        switch(this.externalClass)
+        {
+
+            case 'bg-outline':  
+                  userStyle = outlineStyle;
+                  break;
+            case 'bg-solid':
+                  userStyle = solidStyle;
+                  break; 
+            default:
+                  break;
+        }
+
+        /* react does not allow burleywood in the style css variables
+           workaround here */
+
+         var linkIsStyle = "";
+         var linkIsOutline = "bg-outline";
+         var header = "";
+         var messenger = "";
+
+         debugger;
+         if(this.externalClass === linkIsStyle)
+         {
+              header = <h2 className="welcomeTitle">Update Customer Information</h2> 
+              messenger =<div className="wcenter">{this.messagesOneLine}</div>
+         }
+         else if(this.externalClass === linkIsOutline)
+         {
+            header =  <h2 className="bw">Update Customer Information</h2> 
+            messenger =<div className="bw">{this.messagesOneLine}</div>
+         }
+         else
+         {
+              header =  <h2 style={headerStyle}>Update Customer Information</h2> 
+              messenger =<div style={errorMessagStyle}>{this.messagesOneLine}</div>
+         }
+
+
+         return (<div ><Container> 
+
+             <div id='styleDiv' className={this.externalClass} style={userStyle}>
 
              <br></br>
             <Row className="justify-content-md-center">
-            <h2>Update Customer Information</h2>
+            {header}
             </Row>
             <br></br>
 
@@ -461,7 +572,7 @@ class Update extends React.Component {
                     <Form.Label style={st1}  className='flabel'>Last Nane</Form.Label>
                     <Form.Control type="text" value={this.state.cust.custLast} 
                                   onChange={this.handleChange} name="custLast"/>
-                        <Form.Label style={st1} className='flabel'>Middle Name</Form.Label>
+                    <Form.Label style={st1} className='flabel'>Middle Name</Form.Label>
                     <Form.Control type="text" value={this.state.cust.custMiddle} 
                                   onChange={this.handleChange} name="custMiddle"/>
 
@@ -568,11 +679,12 @@ class Update extends React.Component {
             
             <br></br>
             <Row> 
-                <div className='errorMessage'>{this.state.messages.messages}</div>
+                {messenger}
             </Row>
            
             </Form>
 
+            </div>  
 
          </Container></div>);
 

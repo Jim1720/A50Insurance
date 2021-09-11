@@ -126,8 +126,7 @@ class Signin extends React.Component {
 
         var b1st = {
 
-            color: "white", 
-            backgroundColor: "black",
+            color: "white",  
             margin: "2px",
             fontSize:  "larger",
             fontFamily: "Arial" 
@@ -144,7 +143,7 @@ class Signin extends React.Component {
                 <br></br>
                 
                <Row className="justify-content-md-center">
-                <h2>Customer Sign In</h2>
+                <h2  className="welcomeTitle">Customer Sign In</h2>
                 </Row>
                 <br></br>
                 <Form>
@@ -161,7 +160,7 @@ class Signin extends React.Component {
                     <Button style={b1st} variant="primary" onClick={this.handleSignIn}>Sign In</Button>
                     <br></br> 
                     <br/>
-                    <div className='errorMessage'>{this.state.message}</div>
+                    <div  className="bwlg">{this.state.message}</div>
 
                 </FormGroup>  
                 </Row> 

@@ -50,7 +50,14 @@ class Frame extends React.Component {
         var getMessage = this.props.getMessage;
         var setMessage = this.props.setMessage; 
         var setToken = this.props.setToken;
-        var getToken = this.props.getToken;
+        var getToken = this.props.getToken;  
+        var fetchScreenStyleInformation = this.props.fetchScreenStyleInformation;
+        var handleLoadScreenStyle = this.props.handleLoadScreenStyle;  
+        var promotionCode = this.props.promotionCode;
+        var emailValue = this.props.emailValue;
+         
+        
+
         
         return (
 
@@ -70,7 +77,13 @@ class Frame extends React.Component {
                                                                  handleUpdateForm={handleUpdateForm} 
                                                                  baseUrl = {baseUrl} 
                                                                  setMessage = {setMessage}
-                                                                 setToken = {setToken} />}/>
+                                                                 setToken = {setToken} 
+                                                                 handleLoadScreenStyle = {handleLoadScreenStyle}
+                                                                 fetchScreenStyleInformation = {fetchScreenStyleInformation} 
+                                                                 refreshProp = {this.refreshProp}  
+                                                                 promotionCode = {promotionCode}
+                                                                 emailValue = {emailValue}
+                                                                 />}/>
 
                 <Route path="/signin"   render={ () => <Signin   handleSignIn={handleSignIn}
                                                                  cust={cust}
@@ -89,7 +102,11 @@ class Frame extends React.Component {
                                                                baseUrl = {baseUrl}
                                                                isCustomerSignedIn={isCustomerSignedIn} 
                                                                getMessage = {getMessage}
-                                                               getToken = {getToken} /> }/> 
+                                                               getToken = {getToken}  
+                                                               handleLoadScreenStyle = {handleLoadScreenStyle}
+                                                               fetchScreenStyleInformation = {fetchScreenStyleInformation}
+                                                               refreshProp = {this.refreshProp}
+                                                             /> }/> 
             
                 <Route path="/about"    component={About}/> 
 
@@ -107,7 +124,12 @@ class Frame extends React.Component {
                                                                baseUrl = {baseUrl}
                                                                isCustomerSignedIn = {isCustomerSignedIn}
                                                                setMessage = {setMessage}
-                                                               getToken = {getToken} />} />
+                                                               getToken = {getToken} 
+                                                               handleLoadScreenStyle = {handleLoadScreenStyle}
+                                                               fetchScreenStyleInformation = {fetchScreenStyleInformation}
+                                                               refreshProp = {this.refreshProp}  
+                                                               handleClearAdjustmentFlag = {this.props.handleClearAdjustmentFlag}
+                                                               />} />
 
                 <Route path="/plan"      render={ () => <Plan setPlan={setPlan}
                                                               currentPlan={currentPlan}
