@@ -12,7 +12,7 @@ class App extends React.Component {
 
     message = '';   
     
-    baseUrl  = "https://project20a45serverjsb09142020a1.azurewebsites.net/";
+    baseUrl  = "api-link";
 
     // baseUrl = "http://localhost:3200/"
     
