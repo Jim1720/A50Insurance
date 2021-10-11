@@ -35,6 +35,10 @@ class Classic extends React.Component {
         fontFamily: "Arial"
    }
 
+   var r1 = {
+    borderRadius: "25px"
+   }
+
    var b1st = {
 
     color: "white",  
@@ -42,7 +46,7 @@ class Classic extends React.Component {
     fontSize:  "larger",
     fontFamily: "Arial" 
 
-}
+     }
 
       
       var welcome = "Welcome to A50 Insurance";
@@ -58,19 +62,19 @@ class Classic extends React.Component {
             <Row className="justify-content-md-center">
             <Carousel>
               <Carousel.Item interval="9000">
-                <Image src={road} alt="pic" width='600' height='340' />
+                <Image style={r1} src={road} alt="pic" width='600' height='340' />
                 <Carousel.Caption> 
                   <p>Now is a good time to buy insurance !</p>
                 </Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item interval="9000"> 
-                <Image src={sunset} alt="pic" width='600' height='340' />   
+                <Image style={r1} src={sunset} alt="pic" width='600' height='340' />   
                 <Carousel.Caption> 
                   <p>Best Rates here!</p>
                 </Carousel.Caption>
               </Carousel.Item>
             <Carousel.Item interval="9000">
-               <Image src={lake} alt="pic" width='600' height='340' /> 
+               <Image style={r1} src={lake} alt="pic" width='600' height='340' /> 
                <Carousel.Caption> 
                    <p>Wholesale Coverage!</p>
               </Carousel.Caption>

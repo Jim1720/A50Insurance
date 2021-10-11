@@ -96,6 +96,10 @@ class Start extends React.Component {
             fontFamily: "Arial" 
 
         }
+
+        var r1 = {
+            borderRadius: "25px"
+        }
  
         var gray = {
 
@@ -113,7 +117,7 @@ class Start extends React.Component {
             </Row>
             <br></br>
             <Row className="justify-content-md-center">
-            <Image src={welcomePic} alt="pic" width='600' height='340' />
+            <Image style={r1} src={welcomePic} alt="pic" width='600' height='340' />
             </Row>
             <br></br>
             <Row>

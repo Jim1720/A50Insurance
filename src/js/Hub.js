@@ -146,6 +146,10 @@ class Hub extends React.Component {
 
          }
 
+         var r1 = {
+            borderRadius: "25px"
+        }
+
         return (<Container>
 
             <br></br>
@@ -154,7 +158,7 @@ class Hub extends React.Component {
             </Row>
             <br></br>
             <Row className="justify-content-md-center">
-            <Image src={welcomePic} alt="pic" width='800' height='400' />
+            <Image style={r1} src={welcomePic} alt="pic" width='800' height='400' />
             </Row> 
             <br></br>
             <Row className="justify-content-md-center">
