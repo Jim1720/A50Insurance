@@ -10,15 +10,21 @@ import ScreenStyleManager from './ScreenStyleManager';
 
 class App extends React.Component { 
 
-    message = '';   
-    
-    baseUrl  = "api-link";
+    message = '';    
 
-    // baseUrl = "http://localhost:3200/"
+    yes = "Y";
+
+    baseUrl = "https://project20a45serverjsb09142020a1.azurewebsites.net/";
+
+    // baseUrl = "http://localhost:3200/";
     
     promotionCode = process.env.REACT_APP_A50_PROMOTION_CODE;
 
-    emailValue = process.env.REACT_APP_A50_EMAIL;
+    emailValue = process.env.REACT_APP_A50_EMAIL === this.yes; 
+    envUseStay = process.env.REACT_APP_A50_USE_STAY === this.yes; 
+    envUseFocus = process.env.REACT_APP_A50_USE_FOCUS === this.yes; 
+    envUseNav = process.env.REACT_APP_A50_USE_NAV === this.yes; 
+    envUseActions = process.env.REACT_APP_A50_USE_ACTIONS === this.yes;
 
 
     needsToBeSet = 'unset';  
@@ -27,6 +33,12 @@ class App extends React.Component {
     screenStyleManager = null;
     initialSetup = "0";
     completedSetup = "1";
+ 
+
+    actionList   = []; 
+ 
+  
+
 
     constructor() {
 
@@ -74,14 +86,16 @@ class App extends React.Component {
         adminSignedIn: false,
         resgistering: false,
         token: '',
-        refreshProp: ""
+        refreshProp: "", 
+        focusedClaim : "",
+        beginningStay : false,
+        beginningFocus : false 
 
-    }   
+    }  
  
       
     setToken = (input) => {  
-
-        debugger;
+ 
 
         var data = JSON.parse(input);
         var a45Object = data['A45Object'];
@@ -94,6 +108,94 @@ class App extends React.Component {
         }); 
 
       }
+
+      setBeginning = (selector, value) => {
+
+            debugger;
+            
+            // pass (stay or focus), (false or true) 
+            if(selector === "stay") {
+ 
+                this.setState({  beginningStay: value  }); 
+            }
+
+            if(selector === "focus") {  
+                this.setState({  beginningFocus: value  }); 
+            } 
+            // https://wareboss.com/react-force-update-on-a-functional-component-re-render/
+
+            this.forceUpdate();  // beginningStay was not updating on hisory payment , force it.
+  
+      }
+
+      getBeginning = (selector) => {
+ 
+          
+          // pass (stay or focus), (false or true)
+          if(selector === "stay") {
+ 
+            return this.state.beginningStay;
+
+          }
+
+          if(selector === "focus") {
+ 
+             return this.state.beginningFocus;
+
+          }
+      }
+
+      setFocusedClaim = (claimId) =>
+      {
+          // if already "" do not repeat.
+          if(this.state.focusedClaim === "" &&
+             claimId === "")
+        {
+            return; // avoid endles loop.
+        }
+
+          this.setState({
+
+             focusedClaim : claimId
+
+          });
+  
+      }
+ 
+
+      setAction = (setActionObject) => { 
+
+        // var setActionObject = { action: '', claimId : ''};
+        
+        var count = this.actionList.length; 
+
+        switch(count) {
+            case 0 : this.actionList.push(setActionObject); break; // add at end
+            case 1 : this.actionList.push(setActionObject); break;
+            case 2 : this.actionList.shift();  // remove 1st element 
+                     this.actionList.push(setActionObject); break; // add new at end
+            default: break;
+        } 
+      }
+
+      getAction = (number) => { 
+        
+        // returns object with = { action: '', claimId : ''}; 
+
+        var count = this.actionList.length;
+        if(number >= count )  {
+
+            return { data: false,  action: '', claimId : '' };
+
+        };
+        var act  = this.actionList[number];
+        var action = act["action"];
+        var claimId = act["claimId"];
+
+        return { data: true, action: action , claimId : claimId };
+
+      }
+    
 
       getToken = () => {
 
@@ -224,8 +326,7 @@ class App extends React.Component {
  
 
     handleUpdateForm = (updatedCustomer) => {
- 
-        debugger;
+  
         this.setState({ 
             
           cust: updatedCustomer
@@ -258,7 +359,7 @@ class App extends React.Component {
 
         // called when style  link clicked pass to nav area
         // this will incriment the color in the screen style object. 
-        debugger;
+      
         // is this screen authorized to use styles?
         // call style manager to check screen list 
         var doesThisScreenUseStyles = this.screenStyleManager.authorizeStyles(screen);
@@ -274,8 +375,7 @@ class App extends React.Component {
 
     screenReRender()
     {
-        // rerender screen on changes to style or color
-        debugger
+        // rerender screen on changes to style or color 
         var currentRefreshProp = this.state.refreshProp;
         var newRefreshProp = "";
         switch(currentRefreshProp)
@@ -284,7 +384,7 @@ class App extends React.Component {
             case "1":  newRefreshProp = ""; break;
             default: break;
 
-        }
+        } 
         // force screen rerender.
         this.setState({refreshProp: newRefreshProp}); 
     }
@@ -369,8 +469,7 @@ class App extends React.Component {
         var last = this.state.cust.custLast; 
         var custId = this.state.custId; 
         var custPlan = this.state.custPlan;
-        var statushelp = this.state.statushelp; 
-         
+        var statushelp = this.state.statushelp;  
 
         return(<div>   
 
@@ -386,9 +485,11 @@ class App extends React.Component {
              statushelper = {this.statushelper}   
              fetchScreenStyleInformation = {this.fetchScreenStyleInformation}
              handleNextStyle = {this.handleNextStyle}
-             handleNextColor = {this.handleNextColor}
+             handleNextColor = {this.handleNextColor}   
              
            />  
+
+           
 
             <Frame handleSignIn={this.handleSignIn}
                    handleSignOut={this.handleSignOut}
@@ -419,6 +520,18 @@ class App extends React.Component {
                    handleClearAdjustmentFlag  = {this.handleClearAdjustmentFlag}
                    promotionCode = {this.promotionCode}
                    emailValue = {this.emailValue}
+                   envUseStay = {this.envUseStay}
+                   envUseFocus = {this.envUseFocus}
+                   envUseNav = {this.envUseNav}
+                   envUseActions = {this.envUseActions}   
+                   setAction = {this.setAction}
+                   getAction = {this.getAction}
+                   setBeginning = {this.setBeginning}
+                   getBeginning = {this.getBeginning}
+                   beginningStay = {this.state.beginningStay}
+                   beginningFocus = {this.state.beginningFocus}
+                   focusedClaim = {this.state.focusedClaim}
+                   setFocusedClaim = {this.setFocusedClaim}   
 
                  />  
         </div>); 

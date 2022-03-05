@@ -1,7 +1,8 @@
 // Frame.js
 
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+// changing parm 2 from Switch to Routes and the <Switch></Switch> tags below.
+import { Route, Switch } from 'react-router';
 import Start from './Start'; 
 import Register from './Register'; 
 import Signin from './Signin';
@@ -55,9 +56,17 @@ class Frame extends React.Component {
         var handleLoadScreenStyle = this.props.handleLoadScreenStyle;  
         var promotionCode = this.props.promotionCode;
         var emailValue = this.props.emailValue;
-         
-        
-
+        var envUseStay = this.props.envUseStay;
+        var envUseFocus = this.props.envUseFocus; 
+        var envUseNav = this.props.envUseNav;
+        var envUseActions = this.props.envUseActions;   
+        var setFocusedClaim = this.props.setFocusedClaim;  
+        var setAction = this.props.setAction;
+        var getAction = this.props.getAction;
+        var setBeginning = this.props.setBeginning; 
+        var beginningStay = this.props.beginningStay;
+        var beginningFocus = this.props.beginningFocus;
+        var focusedClaim = this.props.focusedClaim;      
         
         return (
 
@@ -129,6 +138,13 @@ class Frame extends React.Component {
                                                                fetchScreenStyleInformation = {fetchScreenStyleInformation}
                                                                refreshProp = {this.refreshProp}  
                                                                handleClearAdjustmentFlag = {this.props.handleClearAdjustmentFlag}
+                                                               envUseStay = {envUseStay}
+                                                               envUseFocus = {envUseFocus} 
+                                                               envUseActions = {envUseActions}
+                                                               setFocusedClaim = {setFocusedClaim}
+                                                               setAction = {setAction}
+                                                               beginningStay = {beginningStay}
+                                                               beginningFocus = {beginningFocus}
                                                                />} />
 
                 <Route path="/plan"      render={ () => <Plan setPlan={setPlan}
@@ -147,7 +163,20 @@ class Frame extends React.Component {
                                                 baseUrl = {baseUrl}
                                                 isCustomerSignedIn = {isCustomerSignedIn} 
                                                 setMessage = {setMessage}
-                                                getToken = {getToken} />} />
+                                                getToken = {getToken}
+                                                envUseStay = {envUseStay}
+                                                envUseFocus = {envUseFocus} 
+                                                envUseNav = {envUseNav}
+                                                envUseActions = {envUseActions} 
+                                                setFocusedClaim = {setFocusedClaim}  
+                                                setBeginning = {setBeginning}
+                                                setAction = {setAction} 
+                                                getAction = {getAction}
+                                                refreshProp = {this.refreshProp}
+                                                beginningStay = {beginningStay}
+                                                beginningFocus = {beginningFocus}  
+                                                focusedClaim = {focusedClaim}    
+                                                 />} />
 
 
                  <Route path="/regconfirm" render={
@@ -178,7 +207,7 @@ class Frame extends React.Component {
                        render={ () => <AdminCustomerList
                                        isAdminSignedIn = {isAdminSignedIn}
                                        baseUrl = {baseUrl}/> } />
-                                                 
+                                       
                 
                  <Route path="*"    component={Start}/>
 
