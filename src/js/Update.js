@@ -8,8 +8,8 @@ import Row from 'react-bootstrap/Row';
 
 import Button from 'react-bootstrap/Button';
 import  { Container } from 'react-bootstrap'; 
-
-import { withRouter } from 'react-router-dom';
+ 
+import { withRouter } from 'react-router-dom';  // was react-router-dom now react-router.
 
 import Database from './Database';
 import DateService from './DateService';
@@ -553,6 +553,7 @@ class Update extends React.Component {
 
          return (<div ><Container> 
 
+             <br/>
              <div id='styleDiv' className={this.externalClass} style={userStyle}>
 
              <br></br>

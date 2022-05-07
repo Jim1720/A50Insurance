@@ -4,14 +4,12 @@
 import React from 'react';  
 
 import '../css/style.css';
-
-import Button from 'react-bootstrap/Button';
+ 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image';   
 
-import welcomePic from '../images/lake.jpg';
-//import { withRouter } from 'react-router-dom';
+import welcomePic from '../images/lake.jpg'; 
  
 
 class Start extends React.Component {
@@ -84,30 +82,37 @@ class Start extends React.Component {
         var h1style =  { 
                 
              color: "burleywood",
-             fontFamily: "Arial"
+             fontFamily: "Arial",
+             fontStyle: "Italic"
         }
       
- 
-        var b1st = {
-
-            color: "white",  
-            margin: "2px",
-            fontSize:  "larger",
-            fontFamily: "Arial" 
-
-        }
-
+        var h1style2 =  { 
+                
+            color: "lightskyblue",
+            fontFamily: "Arial",
+            fontStyle: "Italic"
+       }
+    
         var r1 = {
             borderRadius: "25px"
         }
  
-        var gray = {
+        var a1 = {
 
-            color: "gray"
+            color: "white"
 
         }
 
-       
+        var a2 = {
+
+            color: "aqua"
+
+        }
+
+        var footstyle = {
+
+            marginTop: "35px"
+        }
          
          
         return (<Container>
@@ -121,25 +126,20 @@ class Start extends React.Component {
             </Row>
             <br></br>
             <Row>
-            <h3 style={h1style} className='welcomeTitle'>{whatToShow}</h3>  
+            <h1 style={h1style2} className='welcomeTitle'>{whatToShow}</h1>  
             </Row>
-            <br></br>
-            <Row className="justify-content-md-center">
-            <Button style={b1st} variant="outline-primary" onClick={this.handleRegister}>Register as new Customer</Button>  
-            <Button style={b1st} variant="outline-primary" onClick={this.handleSignIn}>Sign in as existing Customer</Button>   
-            </Row>
-
-            <footer width='95%'> 
+           
+            <footer width='95%' style={footstyle}> 
                 
-                    <br/><br/><br/><br/>
-                    <span className='bw'>2019 - A50Insurance - React &nbsp; </span>
-                    <span  className='t1' style={gray}>Find out info here &nbsp;</span> 
-                    <a href="/info" onClick={this.info}  className="bw">Info</a>
-                    <span  className='t1' style={gray}>&nbsp; Find about here...&nbsp;</span>
-                    <a href="/about" onClick={this.about}  className="bw">About</a>
-                    <span className='t1' style={gray}>&nbsp; Time to buy...</span>
-                    <a  href="/register" onClick={this.handleRegister} className="bw">{this.friendlyDate}</a>
-                    <span className='t1' style={gray}> This is a demonstration website</span>
+                    <br/><br/><br/>
+                    <span style={a1}>2019 - A50Insurance - React &nbsp; </span>
+                    <span  style={a1} >Find out info here &nbsp;</span> 
+                    <a href="/info" onClick={this.info}  style={a2}>Info</a>
+                    <span  style={a1} >&nbsp; Find about here...&nbsp;</span>
+                    <a href="/about" onClick={this.about}  style={a2}>About</a>
+                    <span style={a1} >&nbsp; Time to buy...</span>
+                    <a  href="/register" onClick={this.handleRegister} style={a2}>{this.friendlyDate}</a>
+                    <span style={a1}> This is a demonstration website</span>
     
                </footer>
 

@@ -32,9 +32,11 @@ h5 { color: gold }
 
 /* react does not recognize 'burleywood' as color in local variable !!. */
 
-.bw { color: burlywood }
+.bw { color: burlywood;}
 
-.bwlg { color: burlywood; font-size:larger }
+.bwlgout { color: burlywood; font-size:larger; margin-left: 400px; } 
+.bwlgin { color: burlywood; font-size:larger; margin-left: 350px; } 
+.bwlginleft { color: burlywood; font-size:larger; margin-left: 300px; }
 
 /* nav link classes */
 
@@ -58,6 +60,17 @@ h5 { color: gold }
 
 
  li { color: white; }
+
+ .msgsignin  { 
+
+    font-family: "Arial";
+    font-size: "larger";
+    color: burlywood;
+}
+
+.burleywood { color: burlywood }
+
+.menumessage { color: burlywood; font-size: larger; font-family: Arial}
              
 
  

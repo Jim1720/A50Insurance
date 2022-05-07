@@ -1,11 +1,9 @@
 
 // Status.js
 
-import React from 'react'; 
-import Form from 'react-bootstrap/Form';
+import React from 'react';  
+import { withRouter } from 'react-router-dom';   
 
-import { withRouter } from 'react-router-dom'; 
- 
     
 class Status extends React.Component {
 
@@ -15,10 +13,10 @@ class Status extends React.Component {
         var first = this.props.first;
         var last = this.props.last;
         var custId = this.props.custId;
-        var sCustId = 'Customer: ' + custId + '  ';
+        var sCustId =  custId + '  ';
         var signedIn = this.props.signedIn;
         var name = first + " " + last + " is signed in";
-        var whatToShow = (signedIn) ? name : "signed out"; 
+        var whatToShow = (signedIn) ? name : ""; 
         var statusOut = { color: 'gray', fontSize: "larger" }
         // switch to burleywood color.
         //var statusIn  = { color: 'gold' } 
@@ -56,11 +54,13 @@ class Status extends React.Component {
              showTimeStatus =  <div style={statusOut} >{whatToShow}</div>;
         }
 
+        var inlineStyle = { display: "inline"};
+
         return (
 
-            <Form inline>
+            <div style={inlineStyle} className="burleywood">
             <div >{showTimeStatus}</div>
-            </Form>
+            </div>
 
         );
 

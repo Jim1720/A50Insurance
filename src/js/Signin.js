@@ -5,9 +5,10 @@ import React from 'react';
 
 import Form from 'react-bootstrap/Form';
 import Row  from 'react-bootstrap/Row'; 
+import Col  from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import { withRouter } from 'react-router-dom';
+import Button from 'react-bootstrap/Button'; 
+import { withRouter } from 'react-router-dom';  // was react-router-dom now react-router.
 
 
 import '../css/formStyle.css';
@@ -26,7 +27,7 @@ class Signin extends React.Component {
 
         custId: '',
         custPass: '',  // controlled 
-        message: 'enter customer id and passowrd to sign in.' 
+        message: 'Enter customer id and password.' 
     }  
 
     handleSuccess = (cust) => { 
@@ -139,16 +140,21 @@ class Signin extends React.Component {
             fontSize: "larger"
         }
 
+        var left1 = {
+            marginLeft: "400px"
+        }
+ 
+
             return (<div><Container> 
                 <br></br>
                 
                <Row className="justify-content-md-center">
-                <h2  className="welcomeTitle">Customer Sign In</h2>
+                <h2>Customer Sign In</h2>
                 </Row>
                 <br></br>
                 <Form>
                 <br></br>
-                <Row className="justify-content-md-center">
+                <Row><Col></Col><Col>
                 <FormGroup>
 
                     <Form.Label style={st1} className="flabel">Customer ID</Form.Label>
@@ -160,10 +166,13 @@ class Signin extends React.Component {
                     <Button style={b1st} variant="primary" onClick={this.handleSignIn}>Sign In</Button>
                     <br></br> 
                     <br/>
-                    <div  className="bwlg">{this.state.message}</div>
 
-                </FormGroup>  
+                </FormGroup> </Col> <Col></Col>
                 </Row> 
+
+                <Row>  
+                    <div style={left1} className="menumessage">{this.state.message}</div> 
+                </Row>
                  
                 </Form>
 

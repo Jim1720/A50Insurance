@@ -3,7 +3,7 @@ import React from 'react';
 
 import Row from 'react-bootstrap/Row'; 
 import Container from 'react-bootstrap/Container';  
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';  // was react-router-dom now react-router.
 
 import Database from './Database'; 
 
@@ -126,9 +126,7 @@ class AdminCustSearch extends React.Component {
     debugger;
     if(this.state.customersFound) {
 
-        foundCustomerHtml = <div><Container> 
-            <h2 className='dBlue'> List Customers </h2>
-            <hr /> 
+        foundCustomerHtml = <div><Container>  
             <table><thead className="pWhite">
             {subHeader} 
             </thead><tbody>

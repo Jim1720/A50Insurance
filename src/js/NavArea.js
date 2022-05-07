@@ -5,7 +5,8 @@ import React from  'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';  
 import Status from './Status';  
-import { withRouter } from 'react-router-dom';  
+ 
+import { withRouter } from 'react-router-dom';   
 import ScreenStyleManager from './ScreenStyleManager';
 // do not use react router boot strap will need to uninstall it.
 
@@ -14,8 +15,8 @@ class NavArea extends React.Component {
     /* link style functions */ 
     handleNextStyle = this.props.handleNextStyle;
     handleNextColor = this.props.handleNextColor;  
-    fetchScreenStyleInformation =this.props.fetchScreenStyleInformation;
-    screenStyleManager = null;
+    fetchScreenStyleInformation =this.props.fetchScreenStyleInformation; 
+    screenStyleManager = null;   
 
     constructor(props) {
         super(props);
@@ -35,7 +36,7 @@ class NavArea extends React.Component {
         // when not registering change status help = 'update' this,
         // will cause the correct literal to be displayed depending 
         // on signin singout status. 'Status.js'.
-        this.props.statushelper('update');  
+        this.props.statushelper('update');   
  
         const { history: { push } } = this.props; 
         push(destination);  
@@ -80,9 +81,13 @@ class NavArea extends React.Component {
         var registered = this.props.registered; 
         var statushelp = this.props.statushelp;
  
-        var navLinkStyle = { fontSize: "larger", color: 'white'} 
+        var navLinkStyle = { fontSize: "larger", color: 'white', marginLeft: "35px"} 
         var navBarStyle = { backGroundColor: 'black',
-            textAalign: 'center' } 
+            textAalign: 'center',
+            borderBottomWidth: 'solid',
+            borderBottomColor: 'white',
+            borderBottomStyle: 'solid'
+        }
         
         // determine route
         var route = this.props.location.pathname;  
@@ -119,11 +124,35 @@ class NavArea extends React.Component {
         }
 
         /* brand shows burleywood */
-        var brand = <Nav.Link className="bwlg" href="#">A50Insurance</Nav.Link>; 
+
+        /* conditions adjust links: when :   signout, signin, register and update... */
+
+        /* adjust link position */ 
+        var brand = "";
+        var moveLinksLeft = (statushelp === "update" || statushelp === "register");
+        if(signedIn)
+        {
+            brand = <Nav.Link className="bwlgin" href="#">A50Insurance</Nav.Link>; 
+            if(moveLinksLeft)
+            { 
+                brand = <Nav.Link className="bwlginleft" href="#">A50Insurance</Nav.Link>; 
+            }
+        }
+        else 
+        {
+            brand = <Nav.Link className="bwlgout" href="#">A50Insurance</Nav.Link>; 
+            if(moveLinksLeft)
+            { 
+                brand = <Nav.Link className="bwlginleft" href="#">A50Insurance</Nav.Link>; 
+            }
+        }
+       
  
         // react did not accept 'burlwood' in the color attribute of style variable so we use CSS.
         // linksel = fontSize larger color burley wood
         // link = fontSize larger and white 
+
+        var leftsp = {marginLeft: "20px" } /* also adjust navbarstyle and name form */
  
 
         var registerLinkClass = (route === "/register") ? "linksel" : "link"; 
@@ -136,24 +165,24 @@ class NavArea extends React.Component {
         var adminLinkClass   = (route === "/admin") ? "linksel" : "link";
         var signinLinkClass   = (route === "/signin") ? "linksel" : "link"; 
         var aboutLinkClass   = (route === "/about") ? "linksel" : "link"; 
-        var outLinkClass = "link";
+        var outLinkClass = "link"; 
 
         var nextStyleStyle = navLinkStyle;
         var nextColorStyle = navLinkStyle;
            
-        var mainLink =   (!signedIn) ? '' :  <Nav.Link className={mainLinkClass} href="#" onClick={this.navigate.bind(this,"/hub")}>Menu</Nav.Link> ;
-        var regLink =    (signedIn) ? '' :  <Nav.Link className={registerLinkClass} href="#" onClick={this.navigate.bind(this,"/register")}>Register </Nav.Link> ;
-        var outLink =    (signedIn) ?  <Nav.Link className={outLinkClass} onClick={this.signout}>Sign Out</Nav.Link> : '';
-        var updateLink = (signedIn) ?  <Nav.Link className={updateLinkClass} href="#" onClick={this.navigate.bind(this,"/update")}>Update </Nav.Link>   : '';
-        var signInLink = (signedIn) ? '' : <Nav.Link className={signinLinkClass} href="#" onClick={this.navigate.bind(this,"/signin")}>Sign In</Nav.Link>; 
-        var adminLink =  (signedIn) ? '' : <Nav.Link className={adminLinkClass} href="#" onClick={this.navigate.bind(this,"/admin")}>Admin</Nav.Link>; 
+        var mainLink =   (!signedIn) ? '' :  <Nav.Link  style={leftsp} className={mainLinkClass} href="#" onClick={this.navigate.bind(this,"/hub")}>Menu</Nav.Link> ;
+        var regLink =    (signedIn) ? '' :  <Nav.Link style={leftsp} className={registerLinkClass} href="#" onClick={this.navigate.bind(this,"/register")}>Register </Nav.Link> ;
+        var outLink =    (signedIn) ?  <Nav.Link  style={leftsp} className={outLinkClass} onClick={this.signout}>Sign Out</Nav.Link> : '';
+        var updateLink = (signedIn) ?  <Nav.Link style={leftsp} className={updateLinkClass} href="#" onClick={this.navigate.bind(this,"/update")}>Update </Nav.Link>   : '';
+        var signInLink = (signedIn) ? '' : <Nav.Link style={leftsp} className={signinLinkClass} href="#" onClick={this.navigate.bind(this,"/signin")}>Sign In</Nav.Link>; 
+        var adminLink =  (signedIn) ? '' : <Nav.Link style={leftsp} className={adminLinkClass} href="#" onClick={this.navigate.bind(this,"/admin")}>Admin</Nav.Link>; 
 
-        var startLink =    (signedIn) ? '' : <Nav.Link className={startLinkClass} href="#" onClick={this.navigate.bind(this,"/start")}>Start </Nav.Link>  
-        var classicLink =  (signedIn) ? '' : <Nav.Link className={classLinkClass} href="#" onClick={this.navigate.bind(this,"/classic")}>Classic </Nav.Link>
+        var startLink =    (signedIn) ? '' : <Nav.Link style={leftsp} className={startLinkClass} href="#" onClick={this.navigate.bind(this,"/start")}>Start </Nav.Link>  
+        var classicLink =  (signedIn) ? '' : <Nav.Link style={leftsp} className={classLinkClass} href="#" onClick={this.navigate.bind(this,"/classic")}>Classic </Nav.Link>
      
-        var claimLink =    (!signedIn) ? '' : <Nav.Link className={claimLinkClass} href="#" onClick={this.navigate.bind(this,"/claim")}>Claim </Nav.Link>  
-        var historyLink =  (!signedIn) ? '' : <Nav.Link className={historyLinkClass} href="#" onClick={this.navigate.bind(this,"/history")}>History </Nav.Link>
-        var aboutLink =    (!signedIn) ? '' : <Nav.Link className={aboutLinkClass} href="#" onClick={this.navigate.bind(this,"/about")}>About </Nav.Link>
+        var claimLink =    (!signedIn) ? '' : <Nav.Link style={leftsp} className={claimLinkClass} href="#" onClick={this.navigate.bind(this,"/claim")}>Claim </Nav.Link>  
+        var historyLink =  (!signedIn) ? '' : <Nav.Link style={leftsp} className={historyLinkClass} href="#" onClick={this.navigate.bind(this,"/history")}>History </Nav.Link>
+        var aboutLink =    (signedIn) ? '' : <Nav.Link style={leftsp} className={aboutLinkClass} href="#" onClick={this.navigate.bind(this,"/about")}>About </Nav.Link>
         
         debugger;
 
@@ -172,11 +201,11 @@ class NavArea extends React.Component {
             <Nav.Link style={nextColorStyle} href="#" onClick={this.onColor}>
                        {colorLinkValue}
             </Nav.Link> : '';
+ 
 
-        return (<div>
+        return (<div className="sticky-top bg-dark">
 
-            <Navbar style={navBarStyle}>
-              <div className='container'>   
+            <Navbar style={navBarStyle}> 
                 {brand}
                 {startLink}
                 {classicLink} 
@@ -195,7 +224,7 @@ class NavArea extends React.Component {
                 <Status signedIn={signedIn} first={first} last={last} registered={registered}
                         custId={custId}
                         statushelp={statushelp}/>
-                </div>
+                 
             </Navbar>
         
            

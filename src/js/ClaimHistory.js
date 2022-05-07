@@ -971,10 +971,8 @@ class ClaimHistory extends React.Component {
         debugger;
         if(this.state.claimsFound) {
  
-            foundClaimHtml = <div><Container> 
-                <h2 className='dBlue htitle' > Claim History </h2>
-                 
-                <hr />  
+            foundClaimHtml = <div><Container>  
+                   
                 {this.showClaims()}  
                 </Container></div>;
         }
@@ -985,10 +983,10 @@ class ClaimHistory extends React.Component {
 
             <Row> 
                  
-                <h1 className="sAqua htitle">Claim History</h1>
+                <div className="sAqua htitle">Claim History</div>
             </Row>
             <Row>
-                <h2 className='dBlue'>Claim History no claims found </h2> 
+                <h2 className='dBlue htitle'>Claim History no claims found </h2> 
             </Row>
             <Row>
                <Button style={b1st} variant="primary" onClick={this.mainMenu.bind(this)}>Menu</Button>  

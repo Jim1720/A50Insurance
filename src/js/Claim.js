@@ -14,8 +14,8 @@ import DateService from './DateService';
 
 import welcomePic from '../images/lake.jpg';
 import '../css/style.css'; 
-import { ListGroup } from 'react-bootstrap';   
-import { withRouter } from 'react-router-dom';  
+import { ListGroup } from 'react-bootstrap';    
+import { withRouter } from 'react-router-dom';  // was react-router-dom now react-router.
 
 import Utility from './Utility';
 
@@ -30,6 +30,15 @@ class Claim extends React.Component {
     setMessage = this.props.setMessage; 
     getToken = this.props.getToken;
     handleClearAdjustmentFlag = this.props.handleClearAdjustmentFlag;
+    setAction = this.props.setAction;
+
+    // stay related for history screen.
+    envUseStay = this.props.envUseStay;   
+    envUseFocus = this.props.envUseFocus; 
+    setFocusedClaim = this.props.setFocusedClaim;
+    beginningStay = this.props.beginningStay;
+    beginningFocus = this.props.beginningFocus;
+    envUseActions = this.props.envUseActions;
 
     // services
     typeServices = []; // services for claim type
@@ -177,19 +186,14 @@ class Claim extends React.Component {
  
         var database = new Database();
         const success = 200;
-        var resp = await database.getServices(baseUrl); 
-        debugger;
+        var resp = await database.getServices(baseUrl);  
         if(resp.status === success) {
-
-            debugger;
-            closureThis.allServices = resp.data; 
-            debugger;
+ 
+            closureThis.allServices = resp.data;  
             // load adjustement fields if required
-            closureThis.claimToAdjust = closureThis.props.claimToAdjust;
-            debugger;
+            closureThis.claimToAdjust = closureThis.props.claimToAdjust; 
             closureThis.creatingAdjustmentClaim = (closureThis.claimToAdjust !== null &&
-                              closureThis.claimToAdjust !== undefined);  
-            debugger;
+                              closureThis.claimToAdjust !== undefined);   
             var defaultMedicalType = 'm';
             // set service drop down data to medical default claim values. 
             var defaultType = (closureThis.creatingAdjustmentClaim === true) ? 
@@ -216,14 +220,10 @@ class Claim extends React.Component {
         this.handleClearAdjustmentFlag();
     }
 
-    setupAdjustment = (closureThis) => {
-
-
-       
+    setupAdjustment = (closureThis) => { 
 
         // direct assignment of state allowed in
-        // constructor only...
-        debugger;
+        // constructor only... 
 
         // component, 
         // not yet mounted must assign directly to state.
@@ -240,8 +240,7 @@ class Claim extends React.Component {
             this.formatDateOnScreen(closureThis.claimToAdjust.DateService);
      
         if(this.claimToAdjust.ClaimType === "m") {
-
-                debugger;
+ 
                 //var defaultDate = "default"; 
 
                 // this.state.claim.DateConfine = "";
@@ -302,8 +301,7 @@ class Claim extends React.Component {
 
         const t = event.target;
         const name = t.name;
-        let value = t.value; 
-    //    console.log('on change ' + name + ' = ' + value);
+        let value = t.value;  
 
         var u = new Utility();
         var newStateClaim = u.replaceProperty(this.state.claim, name, value);
@@ -354,15 +352,13 @@ class Claim extends React.Component {
         if(!pat2s.test(this.state.claim.ClaimDescription.trim())) { 
             msg.push('invalid state ' + this.state.claim.ClaimDescription.trim()); 
         }
-
-        debugger;
+ 
         var notSelected = "";
         // customer field 'custPlan' input property.
         if(this.custPlan === notSelected) { 
             msg.push('Plan must be assigned to customer before a claim can be entered.'); 
         }
-
-        debugger;
+ 
         var s = this.state.claim.Service;
         if(s === null || s === undefined || s === '') {
             msg.push('Please select a Service.');
@@ -391,13 +387,11 @@ class Claim extends React.Component {
 
 
 
-         // 1.8 type edit section
-         debugger;
+         // 1.8 type edit section 
          var claimType = this.state.claim.ClaimType;
          if(claimType === "m") {
             //dateParm.input = this.state.claim.DateConfine
-            // allow blanks to default if not used.
-            debugger;
+            // allow blanks to default if not used. 
             dateParm.input = this.state.claim.DateConfine;
             if(dateParm.input.length > 0) { 
 
@@ -459,9 +453,7 @@ class Claim extends React.Component {
             }
          }
 
-         // end type edits
- 
-        debugger;
+         // end type edits 
 
         if(msg.length === 0) {
             return true;
@@ -542,8 +534,7 @@ class Claim extends React.Component {
         }
         // copy current customer plan to claim.
         addClaim.PlanId = this.custPlan;
-
-        debugger;
+ 
         // calculate covered charges and balance.
         addClaim.TotalCharge = await  this.calculateTotalCharge(addClaim.PlanId, addClaim.Service);
          
@@ -553,8 +544,7 @@ class Claim extends React.Component {
 
         // add token 
         addClaim["_csrf"] = this.getToken();
-        // add thie claim
-        debugger; 
+        // add thie claim 
         // add claim and wait before stamping, adj claim if needed.
         var Adj = this.creatingAdjustmentClaim;
         var ok = await this.addClaimToDatabase(addClaim); 
@@ -566,10 +556,38 @@ class Claim extends React.Component {
            
         } 
         // if adj should not get back here.
+        
         if(Adj) { return; } // messages below are for claim add only not adj. 
 
         if(ok) {
 
+            // features for new claim add 
+ 
+
+            var id = addClaim.ClaimIdNumber.trim();
+ 
+            if(this.envUseActions)
+            { 
+ 
+               var setActionObject = { action: 'New', claimId : id};
+               this.setAction(setActionObject); 
+            }
+ 
+
+
+            if(this.envUseFocus && this.beginningFocus)
+            { 
+                this.setFocusedClaim(id); 
+            }
+ 
+
+            if(this.envUseStay && this.beginningStay)
+            { 
+               const { history: { push } } = this.props; 
+               push('/history');
+               return;
+            } 
+ 
             var a = addClaim.ClaimIdNumber;
             var message = `Claim ${a} added successfully.`;
             this.setMessage(message); 
@@ -593,8 +611,7 @@ class Claim extends React.Component {
  
 
     calculateTotalCharge  =  async (iPlan, iService) => {
-
-        debugger;
+ 
 
         var row = '';
         var cost = 0.0;
@@ -650,12 +667,12 @@ class Claim extends React.Component {
 
     processAdjustment = async (claim, adjustment) => { 
   
-        // stamp adjusted claim
-       debugger; 
+        debugger; 
+        
+        // stamp adjusted claim 
        var stampResult = await  this.stampAdjustedClaim(
                           claim,
-                          adjustment) 
-       debugger;
+                          adjustment)  
        if(stampResult === "OK") { 
 
              // clear adjustment flag in app.js so subsequent 
@@ -667,6 +684,31 @@ class Claim extends React.Component {
              var b =  adjustment.toString();
              var message = `Claim ${a} adjusted by ${b}`;
              this.setMessage(message); 
+
+             debugger;
+ 
+             if(this.envUseActions)
+             { 
+ 
+                var setActionObject = { action: 'Adjustment', claimId : b};
+                this.setAction(setActionObject); 
+             }
+ 
+
+
+             if(this.envUseFocus && this.beginningFocus)
+             { 
+                 this.setFocusedClaim(b); 
+             }
+ 
+
+             if(this.envUseStay && this.beginningStay)
+             { 
+                const { history: { push } } = this.props; 
+                push('/history');
+                return;
+             }
+ 
              const { history: { push } } = this.props; 
              push('/hub');  
              return; 
@@ -685,8 +727,7 @@ class Claim extends React.Component {
 
 
     stampAdjustedClaim = async (adjustedId, adjustmentId) => {
-
-        debugger;
+ 
         // call server to stamp adjusted claim.
         var body = {};
         body.AdjustmentIdNumber = adjustmentId; 
@@ -707,15 +748,13 @@ class Claim extends React.Component {
         // put /stampAdjustedClaim 
         var db = new Database();
         // info data,res = OK,200; or null;500 comes back for good,bad results.
-       var result =  await db.stampClaim(body,this.baseUrl); 
-       debugger;
+       var result =  await db.stampClaim(body,this.baseUrl);  
        var info = result["data"];
        return info; 
     }
 
     setDefaultType = async (type, closureThis) => {
- 
-        debugger; 
+  
         var lit = "";
         switch(type)
         {
@@ -798,8 +837,7 @@ class Claim extends React.Component {
         var firstMatch = true;; // load first match service name 
         var firstService = '';
         // to state.claim.Service so if user does not change sevice box
-        // the first listed will be used.
-        debugger;
+        // the first listed will be used. 
         closureThis.typeServices = []; // clear
         var outIndex = 0;
         for(var i = 0; i < closureThis.allServices.length; i++) {
@@ -814,16 +852,14 @@ class Claim extends React.Component {
                  }
                  outIndex++;
             }
-        }
-      //  console.log('claim typeServices are: ' + closureThis.typeServices);
+        } 
         this.emptyTypeFields(shortType, closureThis, firstService);
       
 
     }
 
     emptyTypeFields = (shortType, closureThis, firstService) => {
-
-      //  console.log('-- empty type fields.');
+ 
 
         var nClaim = this.state.claim;
         nClaim.ClaimType = shortType;
@@ -904,8 +940,7 @@ class Claim extends React.Component {
             // 
         }  
  
-
-        debugger; 
+ 
         this.setState({
 
             messages: { messages: this.msgOut }
@@ -918,15 +953,13 @@ class Claim extends React.Component {
  
 
     loadServiceDropDown = () => {
-
-        debugger;
+ 
         if(this.typeServices.length === 0) {
             // will be empty on 1st call before 
             // setDefaultType is called.
             return;
         }
-
-        debugger;
+ 
     //    console.log('-- load service drop down');
         var serviceOptions = []; 
         for(var i = 0; i < this.typeServices.length; i++) {
@@ -970,9 +1003,7 @@ class Claim extends React.Component {
            style values. 
            note: can not update state here with new sytle info
            or the react system will loop. No style state updates here
-        */
-
-           debugger;  
+        */ 
            var screenStyle = this.fetchScreenStyleInformation("claim");
            this.messageColor = 'burleywood'; // default was lawngreen.
            this.labelColor = 'dodgerblue';
@@ -980,8 +1011,7 @@ class Claim extends React.Component {
    
            // - - - - get class and color information - - - 
            var styleObjectFound = screenStyle === null ? false : true;
-           this.messageColor = 'white'; // default was lawngreen.
-            debugger; 
+           this.messageColor = 'white'; // default was lawngreen. 
             if(styleObjectFound) { 
                
                this.externalClass = screenStyle.externalClass;
@@ -1117,6 +1147,7 @@ class Claim extends React.Component {
 
         return(<Container> 
              
+             <br/>
              <div id="styleDiv" className={this.externalClass} style={userStyle}>
 
             <Row className="justify-content-md-center"> 

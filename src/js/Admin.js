@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form'; 
 import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
-import { withRouter } from 'react-router-dom'; 
+import { withRouter } from 'react-router-dom';  // was react-router-dom now react-router.
 import Database from './Database';  
  
  
@@ -90,8 +90,7 @@ handleSuccess = (cust) => {
 
      var b1st = {
 
-        color: "white", 
-        backgroundColor: "black",
+        color: "white",  
         margin: "2px",
         fontSize:  "larger",
         fontFamily: "Arial" 
@@ -117,7 +116,7 @@ handleSuccess = (cust) => {
                     <Form.Label style={st1} className="flabel">Admin Password</Form.Label>
                     <Form.Control type="password" name="AdminPass" onChange={this.handleChange}/> 
                     <br></br>
-                    <Button style={b1st} variant="outline-warning" onClick={this.handleSignIn}>Admin Sign In</Button>
+                    <Button style={b1st} variant="primary" onClick={this.handleSignIn}>Admin Sign In</Button>
                     <br></br> 
                     <br/>
                     <div className='errorMessage'>{this.state.message}</div>

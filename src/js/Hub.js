@@ -10,8 +10,8 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image'; 
 import Container from 'react-bootstrap/Container'; 
-
-import { withRouter } from 'react-router-dom'; 
+ 
+import { withRouter } from 'react-router-dom';  // was react-router-dom now react-router.
 
 import welcomePic from '../images/lake.jpg'; 
 import '../css/style.css';      
@@ -23,6 +23,7 @@ class Hub extends React.Component {
 
       isCustomerSignedIn = this.props.isCustomerSignedIn; 
       getMessage = this.props.getMessage;
+      handleSignOut = this.props.handleSignOut;
 
       mainMessage = '';
 
@@ -68,9 +69,10 @@ class Hub extends React.Component {
 
     signOut = (e) => {
 
-        e.preventDefault();
+        e.preventDefault();  
+        this.handleSignOut();  
         const { history: { push } } = this.props; 
-        push('/signout');
+        push('/start');
 
     }
 
@@ -171,7 +173,7 @@ class Hub extends React.Component {
             </Row>
             <br></br>
             <Row className="justify-content-md-center">
-                <div className="bwlg">{this.mainMessage}</div>
+                <div className="menumessage">{this.mainMessage}</div>
             </Row>
             
             </Container>);

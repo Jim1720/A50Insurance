@@ -124,6 +124,7 @@ class Frame extends React.Component {
                 <Route path="/hub"       render={ () => <Hub  currentPlan={currentPlan}  
                                                               claimCount={claimCount}
                                                               getMessage = {getMessage}
+                                                              handleSignOut={handleSignOut}
                                                               isCustomerSignedIn={isCustomerSignedIn} />} /> 
 
                 <Route path="/claim"     render={ () => <Claim fileClaim={fileClaim} 
