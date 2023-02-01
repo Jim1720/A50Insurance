@@ -14,9 +14,9 @@ class App extends React.Component {
 
     yes = "Y";
 
-    baseUrl = "https://project20a45serverjsb09142020a1.azurewebsites.net/";
+    // baseUrl = "** azure url **";
 
-    // baseUrl = "http://localhost:3200/";
+     baseUrl = "http://localhost:3200/";
     
     promotionCode = process.env.REACT_APP_A50_PROMOTION_CODE;
 

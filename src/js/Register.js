@@ -7,8 +7,8 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';  
 
 import Button from 'react-bootstrap/Button';
-import  { Container } from 'react-bootstrap';  
-import { withRouter } from 'react-router-dom'; 
+import  { Container } from 'react-bootstrap';   
+import { withRouter } from 'react-router-dom';  // was react-router-dom now react-router.
 
 import Database from './Database';
 import DateService from './DateService'; 
@@ -159,11 +159,13 @@ class Register extends React.Component {
         var name2 = "^[a-zA-Z0-9.#\\s\\_]+$"; //  names desc imbed blank required
         var addr2 = "^[a-zA-Z0-9.#\\_]* || \\s"; // addr 2 is not req allow space. * o,more
         var phone = "^[0-9]{10}|([0-9]{3})[0-9]{3}-[0-9]{4}$"; 
+        var emailPattern = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$"
  
         var pat1 = new RegExp(name1);
         var pat2 = new RegExp(name2); 
         var pat2s  = new RegExp(addr2);
         var pPhone = new RegExp(phone); 
+        var pEmailPattern = new RegExp(emailPattern);
 
         if(!pat1.test(this.state.cust.custId.trim())) { 
             msg.push('invalid customer id ' + this.state.cust.custId.trim()); 
@@ -181,10 +183,11 @@ class Register extends React.Component {
             msg.push('invalid  last name'); 
         }
 
-
-        if(this.emailValue !== this.state.cust.custEmail.trim())
+        
+        // if(this.emailValue !== this.state.cust.custEmail.trim())
+        if(!pEmailPattern.test(this.state.cust.custEmail.trim()))
         {
-            msg.push('invalid  email'); 
+            msg.push('invalid email'); 
         }
 
         if(this.promotionCode !== this.state.cust.PromotionCode.trim())
