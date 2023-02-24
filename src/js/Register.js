@@ -27,7 +27,7 @@ class Register extends React.Component {
     baseUrl = this.props.baseUrl;
     saveBirthDate = ''; // save origional keyed date and send via cust to update. 
     token = this.props.token;
-    setMessage = this.props.setMessage;
+   // setMessage = this.props.setMessage;
     setToken = this.props.setToken;
     handleSignIn = this.props.handleSignIn;
 
@@ -44,6 +44,8 @@ class Register extends React.Component {
 
     promotionCode = this.props.promotionCode;
     emailValue = this.props.emailValue;
+
+    emailPattern = this.props.emailPattern;
 
     
     constructor(props) {
@@ -159,13 +161,11 @@ class Register extends React.Component {
         var name2 = "^[a-zA-Z0-9.#\\s\\_]+$"; //  names desc imbed blank required
         var addr2 = "^[a-zA-Z0-9.#\\_]* || \\s"; // addr 2 is not req allow space. * o,more
         var phone = "^[0-9]{10}|([0-9]{3})[0-9]{3}-[0-9]{4}$"; 
-        var emailPattern = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$"
  
         var pat1 = new RegExp(name1);
         var pat2 = new RegExp(name2); 
         var pat2s  = new RegExp(addr2);
         var pPhone = new RegExp(phone); 
-        var pEmailPattern = new RegExp(emailPattern);
 
         if(!pat1.test(this.state.cust.custId.trim())) { 
             msg.push('invalid customer id ' + this.state.cust.custId.trim()); 
@@ -182,12 +182,12 @@ class Register extends React.Component {
         if(!pat2.test(this.state.cust.custLast.trim())) { 
             msg.push('invalid  last name'); 
         }
-
-        
-        // if(this.emailValue !== this.state.cust.custEmail.trim())
-        if(!pEmailPattern.test(this.state.cust.custEmail.trim()))
+ 
+        //if(this.emailValue !== this.state.cust.custEmail.trim())
+        const rxEmailPattern = new RegExp(this.emailPattern);
+        if(this.state.cust.custEmail.trim().match(rxEmailPattern) == null) 
         {
-            msg.push('invalid email'); 
+            msg.push('invalid  email'); 
         }
 
         if(this.promotionCode !== this.state.cust.PromotionCode.trim())

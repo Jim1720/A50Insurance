@@ -48,6 +48,7 @@ class Update extends React.Component {
     handleLoadScreenStyle = this.props.handleLoadScreenStyle;
     fetchScreenStyleInformation = this.props.fetchScreenStyleInformation;
     refreshProp = this.refreshProp;
+    emailPattern = this.props.emailPattern;
 
     constructor(props) {
 
@@ -272,14 +273,12 @@ class Update extends React.Component {
         var name1 = "^[a-zA-Z0-9]+$";   // cust id / password  1.more
         var name2 = "^[a-zA-Z0-9.#\\s]+$"; //  names desc imbed blank required
         var addr2 = "^[a-zA-Z0-9.#]* || \\s"; // addr 2 is not req allow space. * o,more
-        var phone = "^[0-9]{10}|([0-9]{3})[0-9]{3}-[0-9]{4}$";
-        var email =  "^[0-9a-zA-Z]+@[0-9a-zA-Z]+.{1}[0-9a-zA-Z]+$";
+        var phone = "^[0-9]{10}|([0-9]{3})[0-9]{3}-[0-9]{4}$"; 
  
         var pat1 = new RegExp(name1);  
         var pat2 = new RegExp(name2); 
         var pat2s = new RegExp(addr2)
-        var pPhone = new RegExp(phone);
-        var pEmail = new RegExp(email); 
+        var pPhone = new RegExp(phone); 
 
         debugger;
         var pass = this.state.cust.screenPass;
@@ -316,10 +315,12 @@ class Update extends React.Component {
         if(!pat2.test(this.state.cust.custLast.trim())) { 
             msg.push('invalid  last name'); 
         }
-
-        if(!pEmail.test(this.state.cust.custEmail.trim())) { 
+ 
+        const rxEmailPattern = new RegExp(this.emailPattern); 
+        if(this.state.cust.custEmail.trim().match(rxEmailPattern) == null)
+        {
             msg.push('invalid  email'); 
-        }
+        } 
 
         if(!pPhone.test(this.state.cust.custPhone.trim())) { 
             msg.push('invalid  phone'); 
